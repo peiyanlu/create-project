@@ -1,0 +1,59 @@
+{
+  "name": "project-starter",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "license": "MIT",
+  "type": "module",
+  "private": false,
+  "scripts": {
+    "dev": "tsdown -w",
+    "build": "tsdown",
+    "prepublish": "tsdown"
+  },
+  "main": "./dist/cjs/index.cjs",
+  "types": "./dist/cjs/index.d.cts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.mjs",
+      "types": "./dist/esm/index.d.mts"
+    },
+    "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.11.0",
+    "ansis": "^4.2.0",
+    "commander": "^14.0.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.15",
+    "@vitest/coverage-v8": "^4.0.15",
+    "@release-it/conventional-changelog": "^10.0.2",
+    "tsdown": "^0.17.0",
+    "release-it-pnpm": "^4.6.6",
+    "@types/node": "^22.15.17",
+    "release-it": "^19.0.2"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "typescript",
+    "lib"
+  ],
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/__REPO__/__NAME__.git"
+  },
+  "homepage": "https://github.com/__REPO__/__NAME__",
+  "bugs": {
+    "url": "https://github.com/__REPO__/__NAME__/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  }
+}

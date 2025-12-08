@@ -1,0 +1,59 @@
+{
+  "name": "@peiyanlu/create-project",
+  "version": "0.0.0",
+  "description": "A create new project cli tool.",
+  "author": "YanluPei",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "create-project": "index.cjs"
+  },
+  "scripts": {
+    "dev": "tsdown -w",
+    "build": "tsdown",
+    "test": "vitest",
+    "test:cov": "vitest --coverage",
+    "prepublish": "tsdown",
+    "release": "release-it"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.11.0",
+    "ansis": "^4.2.0",
+    "commander": "^14.0.2"
+  },
+  "devDependencies": {
+    "@release-it/conventional-changelog": "^10.0.2",
+    "@types/node": "^22.15.17",
+    "@vitest/coverage-v8": "^4.0.15",
+    "release-it": "^19.0.2",
+    "release-it-pnpm": "^4.6.6",
+    "tsdown": "^0.17.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.15"
+  },
+  "private": false,
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "keywords": [
+    "project",
+    "minimum",
+    "cli"
+  ],
+  "files": [
+    "dist",
+    "template"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peiyanlu/create-project.git"
+  },
+  "homepage": "https://github.com/peiyanlu/create-project",
+  "bugs": {
+    "url": "https://github.com/peiyanlu/create-project/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
+  }
+}

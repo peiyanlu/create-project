@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:;"
+  >
+  <title><%= name %> <%= version %></title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      color: rgba(var(--primary-color), 1);
+      background-color: rgba(var(--primary-background-color), 1);
+    }
+    
+    @media (prefers-color-scheme: light) {
+      :root {
+        --primary-color: 33, 53, 71;
+        --primary-background-color: 254, 247, 255;
+      }
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --primary-color: 231, 225, 234;
+        --primary-background-color: 20, 18, 24;
+      }
+    }
+    
+    .placeholder {
+      padding: 16px;
+      display: flex;
+      flex-flow: column nowrap;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div class="placeholder">
+    <h1>💖 Hello <%= name %>!</h1>
+    <div>Welcome to your Electron application.</div>
+    <div>
+      We are using Node.js <span id="node-version"></span>,
+      Chromium <span id="chrome-version"></span>,
+      and Electron <span id="electron-version"></span>.
+    </div>
+  </div>
+</div>
+<script type="module" src="/src/renderer.ts"></script>
+</body>
+</html>

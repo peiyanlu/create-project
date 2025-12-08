@@ -1,0 +1,60 @@
+{
+  "name": "electron-app",
+  "productName": "electron-app",
+  "version": "1.0.0",
+  "description": "My Electron application description",
+  "main": ".vite/build/main.js",
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish"
+  },
+  "keywords": [],
+  "author": {
+    "name": "YanluPei",
+    "email": "peiyanlu@vip.qq.com"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@electron-forge/cli": "^7.10.2",
+    "@electron-forge/maker-deb": "^7.10.2",
+    "@electron-forge/maker-dmg": "^7.10.2",
+    "@electron-forge/maker-msix": "^7.10.2",
+    "@electron-forge/maker-rpm": "^7.10.2",
+    "@electron-forge/maker-squirrel": "^7.10.2",
+    "@electron-forge/maker-zip": "^7.10.2",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.10.2",
+    "@electron-forge/plugin-electronegativity": "^7.10.2",
+    "@electron-forge/plugin-fuses": "^7.10.2",
+    "@electron-forge/plugin-vite": "^7.10.2",
+    "@electron-forge/publisher-github": "^7.10.2",
+    "@electron-forge/shared-types": "^7.10.2",
+    "@electron/fuses": "^2.0.0",
+    "electron": "^39.2.4",
+    "typescript": "^5.9.3",
+    "vite": "7.2.6",
+    "vite-plugin-html": "^3.2.2"
+  },
+  "dependencies": {
+    "@peiyanlu/electron-ipc": "^1.0.10",
+    "@peiyanlu/ts-utils": "^0.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/__REPO__/__NAME__.git"
+  },
+  "homepage": "https://github.com/__REPO__/__NAME__",
+  "bugs": {
+    "url": "https://github.com/__REPO__/__NAME__/issues"
+  },
+  "os": [
+    "win32",
+    "darwin",
+    "linux"
+  ],
+  "cpu": [
+    "x64",
+    "arm64"
+  ]
+}

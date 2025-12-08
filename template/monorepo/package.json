@@ -1,0 +1,30 @@
+{
+  "name": "project-monorepo-starter",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "dev": "pnpm run -r --stream dev",
+    "build": "pnpm run -r --stream build",
+    "clean:lib": "pnpm run -r --stream clean:lib",
+    "clean:nms": "pnpm run -r --stream clean:nm && npx rimraf node_modules",
+    "clean:cache": "pnpm store prune",
+    "change": "pnpm changeset"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.29.3",
+    "typescript": "^5.8.3",
+    "@types/node": "^22.15.17",
+    "vitest": "^4.0.15",
+    "@vitest/coverage-v8": "^4.0.15"
+  }
+}
