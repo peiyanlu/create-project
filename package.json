@@ -1,6 +1,6 @@
 {
   "name": "@peiyanlu/create-project",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A create new project cli tool.",
   "author": "YanluPei",
   "license": "MIT",
