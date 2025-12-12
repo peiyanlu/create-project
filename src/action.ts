@@ -391,14 +391,14 @@ export class Action {
       ? PackageManager.PNPM
       : await select({
         message: MESSAGES.PACKAGE_MANAGER_QUESTION,
-        options: [
+        options: (await Promise.all([
           PackageManager.NPM,
           PackageManager.YARN,
           PackageManager.PNPM,
-        ].map(k => {
-          const version = checkVersion(k)
+        ].map(async k => {
+          const version = await checkVersion(k)
           return { label: k, value: k, hint: version }
-        }).filter(k => k.hint),
+        }))).filter(k => k.hint),
       }) as PackageManager
     assertPrompt(pkgManager)
     

@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@release-it/conventional-changelog": "^10.0.2",
-    "@types/node": "^22.15.17",
+    "@types/node": "^24.10.3",
     "@vitest/coverage-v8": "^4.0.15",
     "release-it": "^19.0.2",
     "release-it-pnpm": "^4.6.6",

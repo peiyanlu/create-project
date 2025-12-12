@@ -9,39 +9,18 @@ export const __filename = fileURLToPath(import.meta.url)
 export const __dirname = dirname(__filename)
 
 
-export const promisify = <T extends (...args: any[]) => any>(fn: T) => (...args: Parameters<T>): Promise<ReturnType<T>> => {
-  return new Promise<ReturnType<T>>((resolve, reject) => {
-    try {
-      const result = fn(...args)
-      if (result instanceof Promise) {
-        result.then(resolve).catch(reject)
-      } else {
-        resolve(result)
-      }
-    } catch (e) {
-      reject(e)
-    }
+export const execAsync = (cmd: string) => {
+  return new Promise<string | undefined>(r => {
+    exec(cmd, (err, stdout) => r(err ? undefined : stdout.trim()))
   })
 }
-
-
-export const execAsync = promisify(execSync)
 
 export const pkgVersion = (pkg: string) => {
-  return new Promise(resolve => {
-    exec(`npm view ${ pkg } version`, (err, stdout) => {
-      resolve(err ? undefined : stdout.trim())
-    })
-  })
+  return execAsync(`npm view ${ pkg } version`)
 }
 
-export const checkVersion = (cmd: string) => {
-  try {
-    const res = execSync(`${ cmd } --version`, { encoding: 'utf-8', stdio: 'pipe' })
-    return (res ?? '').trim()
-  } catch (e) {
-    return undefined
-  }
+export const checkVersion = async (cmd: string) => {
+  return execAsync(`${ cmd } --version`)
 }
 
 export const isValidPackageName = (packageName: string) => {
@@ -54,17 +33,12 @@ export const toValidPackageName = (packageName: string) => packageName
   .replace(/\s+/g, '-')
   .replace(/^[._]/, '')
   .replace(/[^a-z\d\-~]+/g, '-')
-  .slice(0, 214)
 
 export const toValidProjectName = (projectName: string) => projectName
   .trim()
-  // .replace(/[\x00-\x1F<>:"/\\|?*]+/g, '-')
-  // .replace(/[-_]+/g, '-')
-  // .replace(/^[.-]+/, '')
-  .replace(/\/+/g, '')
-  .slice(0, 255)
+  .replace(/\/+$/g, '')
 
-export const emptyDir = async (dir: string, ignore: string[]) => {
+export const emptyDir = async (dir: string, ignore: string[] =[]) => {
   if (!existsSync(dir)) {
     return false
   }
@@ -77,11 +51,10 @@ export const emptyDir = async (dir: string, ignore: string[]) => {
   return true
 }
 
-export const isEmpty = async (path: string, ignore: string[]) => {
+export const isEmpty = async (path: string, ignore: string[] = []) => {
   const files = await readdir(path)
-  const a = files.sort()
-  const b = ignore.sort()
-  return a.length <= b.length && a.every((e, i) => e === b[i])
+  const filtered = files.filter(f => !ignore.includes(f))
+  return filtered.length === 0
 }
 
 export const editFile = async (file: string, callback: (content: string) => string) => {
@@ -90,11 +63,12 @@ export const editFile = async (file: string, callback: (content: string) => stri
   return writeFile(file, callback(content), 'utf-8')
 }
 
-export const isGitRepo = (dir?: string) => new Promise<boolean>((resolve) => {
-  exec(`git -C "./${ dir }" rev-parse --is-inside-work-tree`, (error, stdout) => {
-    resolve(error ? false : JSON.parse(stdout))
-  })
-})
+export const isGitRepo = async (dir?: string) => {
+  const target = dir ? `./${ dir }` : '.'
+  const cmd = `git -C "${ target }" rev-parse --is-inside-work-tree`
+  const res = await execAsync(cmd)
+  return !!res
+}
 
 export const readSubDirs = async (source: string, ignore: string[] = []) => {
   const res = await readdir(source, { withFileTypes: true })

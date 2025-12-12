@@ -6,7 +6,7 @@ export default mergeConfig(
   vitestConfig,
   defineConfig({
     test: {
-      include: [ 'test/**/*.e2e-spec.ts' ],
+      include: [ '**/*.e2e-spec.mts' ],
     },
   }),
 )

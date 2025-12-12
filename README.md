@@ -2,6 +2,9 @@
 
 <p>
   <a href="https://www.npmjs.com/package/@peiyanlu/create-project" target="_blank">
+    <img src="https://img.shields.io/badge/npm-@peiyanlu/create--project-blue.svg?logo=npm" alt="NPM Package" />
+  </a>
+  <a href="https://www.npmjs.com/package/@peiyanlu/create-project" target="_blank">
     <img src="https://img.shields.io/npm/v/@peiyanlu/create-project.svg" alt="NPM Version" />
   </a>
   <a href="https://www.npmjs.com/package/@peiyanlu/create-project" target="_blank">
@@ -39,11 +42,11 @@ You can also directly specify the project name and the target directory handled 
 
 ```bash
 # npm 7+, extra double-dash is needed:
-npm create @peiyanlu/project@latest my-nest-app -- --overwrite
+npm create @peiyanlu/project@latest my-project -- --overwrite
 
 # yarn
-yarn create @peiyanlu/project my-nest-app --overwrite
+yarn create @peiyanlu/project my-project --overwrite
 
 # pnpm
-pnpm create @peiyanlu/project my-nest-app --overwrite
+pnpm create @peiyanlu/project my-project --overwrite
 ```
