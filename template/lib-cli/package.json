@@ -5,19 +5,17 @@
   "license": "MIT",
   "type": "module",
   "private": false,
-  "main": "./dist/cjs/index.cjs",
-  "types": "./dist/cjs/index.d.cts",
-  "exports": {
-    ".": {
-      "import": "./dist/esm/index.mjs",
-      "types": "./dist/esm/index.d.mts"
-    },
-    "./package.json": "./package.json"
-  },
+  "bin": {},
   "scripts": {
     "dev": "tsdown -w",
     "build": "tsdown",
     "prepublish": "tsdown"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.11.0",
+    "ansis": "^4.2.0",
+    "commander": "^14.0.2",
+    "@peiyanlu/cli-utils": "^0.0.1"
   },
   "devDependencies": {
     "typescript": "^5.9.3",
@@ -38,7 +36,7 @@
   },
   "keywords": [
     "typescript",
-    "lib"
+    "cli"
   ],
   "files": [
     "dist"

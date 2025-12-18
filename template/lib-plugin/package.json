@@ -38,7 +38,7 @@
   },
   "keywords": [
     "typescript",
-    "lib"
+    "plugin"
   ],
   "files": [
     "dist"

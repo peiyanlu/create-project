@@ -1,15 +1,24 @@
-import { red } from 'ansis'
+import { readJsonFile } from '@peiyanlu/cli-utils'
+import { Ansis, blueBright, cyan, gray, greenBright, magenta, red, redBright, yellow } from 'ansis'
 import { program } from 'commander'
-import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { Action } from './action.js'
+import { Action, Tpl } from './action.js'
 import { __dirname } from './utils.js'
 
 
-const pkg = JSON.parse(readFileSync(join(__dirname, '..', 'package.json'), 'utf8'))
+const pkg = readJsonFile(join(__dirname, '..', 'package.json'))
+
+const TEMPLATES: [ Ansis, string ][] = [
+  [ yellow, Tpl.Electron ],
+  [ cyan, Tpl.React ],
+  [ magenta, Tpl.Lib ],
+  [ redBright, Tpl.Cli ],
+  [ greenBright, Tpl.Plugin ],
+  [ blueBright, Tpl.Monorepo ],
+]
 
 program
-  .name(pkg.name)
+  .name('create-project')
   .description(pkg.description)
   .version(pkg.version, '-v, --version', 'Output the current version.')
   .usage('[DIRECTORY] [OPTION]...')
@@ -21,6 +30,10 @@ program
     await new Action().handle(argName, options)
   })
   .helpOption('-h, --help', 'Output usage information.')
+  .addHelpText(
+    'after',
+    `\nAvailable templates: ${ TEMPLATES.map(([ color, text ]) => `\n ${ gray`-` } ${ color(text) }`).join('') }`,
+  )
   .parse(process.argv)
 
 

@@ -1,12 +1,8 @@
-import { defineConfig, mergeConfig } from 'vitest/config'
-import vitestConfig from './vitest.config.mjs'
+import { defineConfig } from 'vitest/config'
 
 
-export default mergeConfig(
-  vitestConfig,
-  defineConfig({
-    test: {
-      include: [ 'test/**/*.e2e-spec.ts' ],
-    },
-  }),
-)
+export default defineConfig({
+  test: {
+    include: [ '**/*.e2e.{test,spec}.{ts,mts}' ],
+  },
+})

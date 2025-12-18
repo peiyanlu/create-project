@@ -1,134 +1,128 @@
-import { cancel, confirm, intro, isCancel, log, multiselect, outro, select, tasks, text } from '@clack/prompts'
-import { cyan, gray } from 'ansis'
-import { existsSync, mkdirSync } from 'node:fs'
-import { copyFile, readdir } from 'node:fs/promises'
-import { basename, join, relative, resolve } from 'node:path'
-import { scheduler } from 'node:timers/promises'
-import { MESSAGES } from './messages.js'
+import { cancel, intro, isCancel, outro, select, tasks, text } from '@clack/prompts'
 import {
-  __dirname,
   checkVersion,
+  type CliOptions,
+  copyDirAsync,
   editFile,
   emptyDir,
   execAsync,
+  getGitConfig,
   isEmpty,
   isGitRepo,
   isValidPackageName,
-  readSubDirs,
+  PkgManager,
   toValidPackageName,
   toValidProjectName,
-} from './utils.js'
+  ConfirmResult,
+} from '@peiyanlu/cli-utils'
+import { cyan, gray } from 'ansis'
+import { existsSync } from 'node:fs'
+import { basename, relative, resolve } from 'node:path'
+import { scheduler } from 'node:timers/promises'
+import { Context } from './context.js'
+import { MESSAGES } from './messages.js'
+import { ElectronAppPlugin, ReactAppPlugin } from './plugins/app.js'
+import { TemplatePlugin } from './plugins/base.js'
+import { LibCliPlugin, LibMonorepoPlugin, LibPlugin, LibPluginPlugin } from './plugins/lib.js'
+import { __dirname } from './utils.js'
 
-
-export enum PackageManager {
-  NPM = 'npm',
-  YARN = 'yarn',
-  PNPM = 'pnpm',
-}
-
-export enum YesOrNo {
-  Yes = 'yes',
-  No = 'no',
-  Null = 'null',
-}
 
 export interface PromptsResult {
   targetDir: string;
   packageName: string;
   description: string;
-  pkgManager: PackageManager;
+  pkgManager: PkgManager;
   template: Tpl;
-  cis: string[];
+  useCI: boolean;
   useVitest: boolean;
-  useGit: boolean;
-  repo: `${ string }/${ string }`;
+  repo: string;
 }
 
-const renameFiles: Record<string, string | undefined> = {
-  _gitignore: '.gitignore',
-  _npmrc: '.npmrc',
-  '_release-it.json': '.release-it.json',
-  _github: '.github',
-  _changeset: '.changeset',
-}
+export type RealContext = Context<PromptsResult>
 
-const ciFiles: string[] = [
-  '.github',
-  '.release-it.json',
-  'renovate.json',
-]
-
-const vitestFiles: string[] = [
-  'app.controller.spec.ts',
-  'test',
-  'app.e2e-spec.ts',
-  'vitest.config.mts',
-  'vitest.config.e2e.mts',
-  'vitest-globals.d.ts',
-]
-
-const pnpmFiles: string[] = [
-  'pnpm-workspace.yaml',
-]
-
-enum Tpl {
+export enum Tpl {
   Lib = 'lib',
-  Cli = 'cli',
-  Plugin = 'plugin',
-  Monorepo = 'monorepo',
-  Electron = 'electron',
-  React = 'react',
-}
-
-const copyDirAsync = async (source: string, target: string, opts: PromptsResult) => {
-  mkdirSync(target, { recursive: true })
-  const entries = await readdir(source, { withFileTypes: true })
-  for (const entry of entries) {
-    const { useVitest, pkgManager } = opts
-    
-    const name = entry.name
-    const isDir = entry.isDirectory()
-    const realName = renameFiles[name] ?? name
-    
-    if (ciFiles.includes(realName)) {
-      if (!opts.cis.includes(realName)) {
-        continue
-      }
-    }
-    
-    if (!useVitest && vitestFiles.includes(name)) {
-      continue
-    }
-    
-    if ((pkgManager !== PackageManager.PNPM) && pnpmFiles.includes(name)) {
-      continue
-    }
-    
-    const srcPath = join(source, name)
-    const destPath = join(target, realName)
-    if (isDir) {
-      await copyDirAsync(srcPath, destPath, opts)
-    } else {
-      await copyFile(srcPath, destPath)
-    }
-  }
+  Cli = 'lib-cli',
+  Plugin = 'lib-plugin',
+  Monorepo = 'lib-monorepo',
+  Electron = 'app-electron',
+  React = 'app-react',
 }
 
 
-const assertPrompt = (value: unknown) => {
+export const assertPrompt = (value: unknown) => {
   if (isCancel(value)) {
-    cancel('operation cancelled')
+    cancel(MESSAGES.OPERATION_ABORTED)
     process.exit(0)
   }
 }
 
+export const createDefaultConfig = (): PromptsResult => ({
+  targetDir: '',
+  packageName: '',
+  description: '',
+  pkgManager: PkgManager.NPM,
+  template: Tpl.Lib,
+  useCI: false,
+  useVitest: false,
+  repo: '',
+})
+
+const handleDirConflict = async (targetDir: string, options: CliOptions): Promise<void> => {
+  const isExists = existsSync(targetDir)
+  const ignore = [ '.git', '.idea', '.vscode' ]
+  if (isExists && !await isEmpty(targetDir, ignore)) {
+    const overwrite = options.overwrite
+      ? ConfirmResult.YES
+      : await select({
+        message: MESSAGES.DIRECTORY_CONFLICT_QUESTION(targetDir),
+        options: [
+          {
+            label: 'Cancel',
+            value: ConfirmResult.NO,
+            hint: 'cancel and exit',
+          },
+          {
+            label: 'Remove',
+            value: ConfirmResult.YES,
+            hint: 'remove files and continue',
+          },
+          {
+            label: 'Ignore',
+            value: ConfirmResult.IGNORE,
+            hint: 'ignore files and continue',
+          },
+        ],
+      })
+    assertPrompt(overwrite)
+    switch (overwrite) {
+      case ConfirmResult.YES:
+        await emptyDir(targetDir, ignore)
+        break
+      case ConfirmResult.NO:
+        outro(MESSAGES.OPERATION_ABORTED)
+        process.exit(0)
+    }
+  }
+}
+
+const pluginRegistry: Record<Tpl, () => TemplatePlugin> = {
+  [Tpl.Lib]: () => new LibPlugin(),
+  [Tpl.Cli]: () => new LibCliPlugin(),
+  [Tpl.Plugin]: () => new LibPluginPlugin(),
+  [Tpl.Monorepo]: () => new LibMonorepoPlugin(),
+  [Tpl.React]: () => new ReactAppPlugin(),
+  [Tpl.Electron]: () => new ElectronAppPlugin(),
+}
+
 
 export class Action {
-  public async handle(cmdArgs: string | undefined, options: Record<string, boolean | string>): Promise<void> {
+  public async handle(cmdArgs: string | undefined, options: CliOptions): Promise<void> {
     intro(cyan('create-project'))
     
-    const config = await this.handlePrompts(cmdArgs, options)
-    const { targetDir, pkgManager, template, packageName, description, useVitest, useGit, cis, repo } = config
+    const ctx = new Context(createDefaultConfig())
+    const config = await this.handlePrompts(cmdArgs, options, ctx)
+    const { targetDir, pkgManager, template, packageName, description, useVitest } = config
     
     if (options.dryRun) {
       outro(MESSAGES.DRY_RUN_MODE)
@@ -136,129 +130,62 @@ export class Action {
     }
     
     const cwd: string = process.cwd()
-    const target = join(cwd, targetDir)
+    const source = resolve(__dirname, '..', 'template', template)
+    const target = resolve(cwd, targetDir)
+    
+    const plugin = pluginRegistry[template]()
     
     await tasks([
       {
         title: MESSAGES.PROJECT_INFORMATION_START,
         task: async () => {
-          const jr = (p: string) => join(target, p)
+          await plugin.beforeCopy(ctx)
           
-          const isCli = Tpl.Cli === template
-          const isSub = [ Tpl.Cli, Tpl.Plugin ].includes(template)
-          const isYarn = pkgManager === PackageManager.YARN
-          const isPnpm = pkgManager === PackageManager.PNPM
-          const useReleaseIt = cis.includes('.release-it.json')
-          
-          // -----------------------------------------------------
-          if (isSub) {
-            const templateDir = resolve(__dirname, '..', 'template', Tpl.Lib)
-            await copyDirAsync(templateDir, target, config)
-          }
-          const templateDir = resolve(__dirname, '..', 'template', template)
-          await copyDirAsync(templateDir, target, config)
-          
-          await editFile(jr('README.md'), content => {
-            return content
-              .replace(/\$PACKAGE_NAME/g, packageName)
-              .replace(/\$DESCRIPTION/g, description)
-              .replace(/\$INSTALL/g, isYarn ? PackageManager.YARN : `${ pkgManager } install`)
-              .replace(/\$RUN/g, isYarn ? PackageManager.YARN : `${ pkgManager } run`)
-              .replace(/\$START([\s\S]*?)\$END/g, (_, $1) => useVitest ? $1 : '')
-              .replace(/(\r?\n){3,}/g, '\r\n'.repeat(2))
-          })
-          
-          await editFile(jr('package.json'), content => {
-            return content.replace(/__REPO__\/__NAME__/g, repo)
-          })
-          
+          await copyDirAsync(source, target, plugin.getCopyOptions(ctx))
           await scheduler.yield()
           
           // -----------------------------------------------------
           process.chdir(targetDir)
+          await scheduler.yield()
+          
+          const [ name, email ] = await Promise.all([ 'user.name', 'user.email' ].map(k => getGitConfig(k)))
           
           // -----------------------------------------------------
-          const deps: string[] = []
-          const devDeps: string[] = []
-          const scripts: Record<string, string> = {}
+          await editFile('./README.md', content => {
+            const isYarn = pkgManager === PkgManager.YARN
+            return content
+              .replace(/\$PACKAGE_NAME/g, packageName)
+              .replace(/\$DESCRIPTION/g, description)
+              .replace(/\$INSTALL/g, isYarn ? PkgManager.YARN : `${ pkgManager } install`)
+              .replace(/\$RUN/g, isYarn ? PkgManager.YARN : `${ pkgManager } run`)
+              .replace(/\$START([\s\S]*?)\$END/g, (_, $1) => useVitest ? $1 : '')
+              .replace(/(\r?\n){3,}/g, '\r\n'.repeat(2))
+          })
+          await editFile('./LICENSE', content => {
+            return content
+              .replace(/^\$YEAR$/g, new Date().getFullYear().toString())
+              .replace(/^\$OWNER$/g, name ?? 'OWNER')
+          })
+          
+          await plugin.afterCopy(ctx)
+          await plugin.afterAll(ctx)
           
           // -----------------------------------------------------
-          if (!useReleaseIt) {
-            const release = [
-              'release-it',
-              'release-it-pnpm',
-              '@release-it/conventional-changelog',
-            ]
-            devDeps.push(...release)
-          }
-          if (useReleaseIt) {
-            Object.assign(scripts, { 'release': 'release-it' })
-            
-            if (!isPnpm) {
-              devDeps.push('release-it-pnpm')
-              
-              if (useReleaseIt) {
-                await editFile(jr('.release-it.json'), content => {
-                  const json = JSON.parse(content)
-                  delete json.plugins['release-it-pnpm']
-                  return JSON.stringify(json, null, 2)
-                })
-              }
-            }
-          }
-          
-          // -----------------------------------------------------
-          if (!useVitest) {
-            const vitest = [
-              'vitest',
-              '@vitest/coverage-v8',
-            ]
-            devDeps.push(...vitest)
-          }
-          if (useVitest) {
-            Object.assign(scripts, {
-              test: 'vitest',
-              'test:e2e': 'vitest run -c ./vitest.config.e2e.mts',
-              'test:cov': 'vitest run --coverage',
-            })
-          }
-          
-          // -----------------------------------------------------
-          if (!isCli) {
-            deps.push(...[
-              '@clack/prompts',
-              'ansis',
-              'commander',
-            ])
-          }
-          
-          // -----------------------------------------------------
-          const del = deps.map(k => `dependencies[${ k }]`)
-            .concat(devDeps.map(k => `devDependencies[${ k }]`))
-            .join(' ')
-          const add = Object.entries(scripts)
-            .map(([ k, v ]) => `scripts.${ k }="${ v }"`)
-            .join(' ')
           const cmdArr = [
             `npm pkg set name="${ packageName }" description="${ description }"`,
+            `npm pkg set author.name="${ name }" author.email="${ email }"`,
           ]
-          if (isCli) {
-            cmdArr.push('npm pkg delete exports main module types')
-            cmdArr.push(`npm pkg set bin.${ packageName }="index.cjs"`)
-          }
-          if (del) cmdArr.push(`npm pkg delete ${ del }`)
-          if (add) cmdArr.push(`npm pkg set ${ add }`)
-          if (useGit) {
-            const git = [
+          
+          const isRepo = await isGitRepo()
+          if (!isRepo) {
+            cmdArr.push(...[
               'git init',
               'git branch -M master',
-            ]
-            cmdArr.push(...git)
+            ])
           }
-          
-          await scheduler.yield()
           for (const cmd of cmdArr) {
             await execAsync(cmd)
+            await scheduler.yield()
           }
           
           return MESSAGES.PROJECT_INFORMATION_END
@@ -273,224 +200,137 @@ export class Action {
       const dir = cdProjectName.includes(' ') ? `"${ cdProjectName }"` : cdProjectName
       doneMessage += `${ prefix } ${ cyan('cd') } ${ dir }\n`
     }
-    const dev = Tpl.Electron === template ? 'start' : 'dev'
     switch (pkgManager) {
-      case PackageManager.YARN:
+      case PkgManager.YARN:
         doneMessage += `${ prefix } yarn`
-        doneMessage += `${ prefix } yarn ${ dev }`
+        doneMessage += `${ prefix } yarn dev`
         break
       default:
         doneMessage += `${ prefix } ${ pkgManager } install`
-        doneMessage += `${ prefix } ${ pkgManager } run ${ dev }`
+        doneMessage += `${ prefix } ${ pkgManager } run dev`
         break
     }
     
-    if (Tpl.Monorepo === template) {
-      doneMessage += '\n'
-      doneMessage += `${ prefix } pnpm changeset init`
-    }
+    doneMessage += plugin.getDoneMessage(prefix)
     
     outro(doneMessage)
     
-    await scheduler.wait(500)
     process.exit(0)
   }
   
   public async handlePrompts(
     cmdArgs: string | undefined,
-    options: Record<string, boolean | string>,
+    options: CliOptions,
+    ctx: RealContext,
   ): Promise<PromptsResult> {
     // 1. Get project name and target dir
-    let targetDir = cmdArgs ? toValidProjectName(cmdArgs) : undefined
-    if (!targetDir) {
-      const projectNameResult = await text({
+    const prjName = cmdArgs ? toValidProjectName(cmdArgs) : undefined
+    const projectName = prjName
+      ? prjName
+      : await text({
         message: MESSAGES.PROJECT_NAME_QUESTION,
         placeholder: 'Anonymous',
         defaultValue: 'untitled',
       }) as string
-      assertPrompt(projectNameResult)
-      targetDir = toValidProjectName(projectNameResult)
-    }
+    assertPrompt(projectName)
+    ctx.config.targetDir = toValidProjectName(projectName)
     
     
     // 2. Handle directory if exist and not empty
-    const isExists = existsSync(targetDir)
-    const ignore = [ '.git', '.idea', '.vscode' ]
-    if (isExists && !await isEmpty(targetDir, ignore)) {
-      const overwrite = options.overwrite
-        ? YesOrNo.Yes
-        : await select({
-          message: MESSAGES.DIRECTION_CONFLICT_QUESTION(targetDir),
-          options: [
-            {
-              label: 'Cancel operation',
-              value: YesOrNo.No,
-            },
-            {
-              label: 'Remove files and continue',
-              value: YesOrNo.Yes,
-            },
-            {
-              label: 'Ignore files and continue',
-              value: YesOrNo.Null,
-            },
-          ],
-        })
-      assertPrompt(overwrite)
-      switch (overwrite) {
-        case YesOrNo.Yes:
-          await emptyDir(targetDir, ignore)
-          break
-        case YesOrNo.No:
-          process.exit(0)
-      }
-    }
+    await handleDirConflict(ctx.config.targetDir, options)
     
     
     // 3. Get package name
-    let packageName = basename(resolve(targetDir))
-    if (!isValidPackageName(packageName)) {
-      const packageNameResult = await text({
+    const pkgName = basename(resolve(ctx.config.targetDir))
+    ctx.config.packageName = isValidPackageName(pkgName)
+      ? pkgName
+      : await text({
         message: MESSAGES.PACKAGE_NAME_QUESTION,
-        initialValue: toValidPackageName(packageName),
-        placeholder: toValidPackageName(packageName),
+        initialValue: toValidPackageName(pkgName),
+        placeholder: toValidPackageName(pkgName),
         validate(val) {
           if (!isValidPackageName(val)) {
-            return 'Invalid package.json name'
+            return 'Invalid'
           }
         },
       }) as string
-      assertPrompt(packageNameResult)
-      packageName = packageNameResult
-    }
+    assertPrompt(ctx.config.packageName)
     
     
     // 4. Get project description
-    const description = await text({
+    ctx.config.description = await text({
       message: MESSAGES.PACKAGE_DESCRIPTION_QUESTION,
       placeholder: 'Anonymous',
       defaultValue: 'My project description.',
     }) as string
-    assertPrompt(description)
+    assertPrompt(ctx.config.description)
     
     
     // 5. Choose a template
-    const dirs = await readSubDirs(resolve(__dirname, '..', 'template'))
     const argTemplate = options.template as Tpl
-    const template = dirs.includes(argTemplate)
+    ctx.config.template = Object.values(Tpl).includes(argTemplate)
       ? argTemplate
       : await select({
         message: MESSAGES.PROJECT_TEMPLATE_QUESTION,
-        options: dirs.map(k => ({ label: k, value: k })),
+        options: [
+          {
+            label: 'Library',
+            value: Tpl.Lib,
+            hint: 'Publishable npm library with TypeScript, ESM & CJS support',
+          },
+          {
+            label: 'CLI',
+            value: Tpl.Cli,
+            hint: 'Command-line tool for scaffolding and automation',
+          },
+          {
+            label: 'Monorepo',
+            value: Tpl.Monorepo,
+            hint: 'Multi-package repository using pnpm workspace',
+          },
+          {
+            label: 'Plugin',
+            value: Tpl.Plugin,
+            hint: 'Plugin for Anonymous',
+          },
+          {
+            label: 'Electron',
+            value: Tpl.Electron,
+            hint: 'Desktop application using Electron, Vite, and TypeScript',
+          },
+          {
+            label: 'React',
+            value: Tpl.React,
+            hint: 'React web project powered by Vite and TypeScript',
+          },
+        ],
       }) as Tpl
-    assertPrompt(template)
+    assertPrompt(ctx.config.template)
+    
+    
+    const plugin = pluginRegistry[ctx.config.template]()
+    const requiresPnpm = plugin.requiresPnpm() ?? false
     
     
     // 6. Choose a package manager
-    const pkgManager = Tpl.Monorepo === template
-      ? PackageManager.PNPM
+    ctx.config.pkgManager = requiresPnpm
+      ? PkgManager.PNPM
       : await select({
         message: MESSAGES.PACKAGE_MANAGER_QUESTION,
         options: (await Promise.all([
-          PackageManager.NPM,
-          PackageManager.YARN,
-          PackageManager.PNPM,
+          PkgManager.PNPM,
+          PkgManager.NPM,
+          PkgManager.YARN,
         ].map(async k => {
           const version = await checkVersion(k)
           return { label: k, value: k, hint: version }
         }))).filter(k => k.hint),
-      }) as PackageManager
-    assertPrompt(pkgManager)
+      }) as PkgManager
+    assertPrompt(ctx.config.pkgManager)
     
     
-    // 7. Choose ci configs
-    const useReleaseIt = ![ Tpl.React, Tpl.Monorepo ].includes(template)
-    const useGithubReno = ![ Tpl.React ].includes(template)
-    const cis = !useGithubReno ? [] : await multiselect({
-      message: MESSAGES.PROJECT_CI_QUESTION,
-      options: [
-        {
-          label: 'GitHub Workflows',
-          hint: 'Adds basic CI/CD templates under .github/workflows',
-          value: '.github',
-          filter: () => useGithubReno,
-        },
-        {
-          label: 'release-it',
-          hint: 'Generates .release-it.json for versioning, changelogs, and releases',
-          value: '.release-it.json',
-          filter: () => useReleaseIt,
-        },
-        {
-          label: 'Renovate',
-          hint: 'Creates renovate.json to automate dependency updates',
-          value: 'renovate.json',
-          filter: () => useGithubReno,
-        },
-        {
-          label: 'None',
-          hint: 'Skip all optional configs',
-          value: '',
-          filter: () => useGithubReno,
-        },
-      ].filter(k => {
-        if (k.filter()) return k
-      }),
-      required: false,
-      initialValues: [],
-    }) as string[]
-    assertPrompt(cis)
+    await plugin.extendPrompts(ctx)
     
-    
-    // 8. Confirm whether you use Vitest
-    const unUse = [ Tpl.React, Tpl.Electron ].includes(template)
-    const useVitest = unUse ? false : await confirm({
-      message: MESSAGES.VITEST_USE_QUESTION,
-    }) as boolean
-    assertPrompt(useVitest)
-    
-    
-    // 9. Confirm whether you use Git
-    const isRepo = await isGitRepo()
-    const useGithub = cis.includes('.github')
-    const useGit = isRepo
-      ? false
-      : useGithub
-        ? true
-        : await confirm({
-          message: MESSAGES.GIT_USE_QUESTION,
-        }) as boolean
-    assertPrompt(useGit)
-    
-    
-    // 10. Input GitHub repo
-    const unGit = !(useGit && useGithubReno)
-    const defRepo = '__REPO__/__NAME__'
-    const repo = unGit
-      ? defRepo
-      : await text({
-        message: MESSAGES.PROJECT_REPO_QUESTION,
-        initialValue: defRepo,
-        placeholder: defRepo,
-        validate(str) {
-          const regex = /^[a-zA-Z0-9-_]+\/[a-zA-Z0-9-_]+$/
-          if (!regex.test(str)) {
-            return 'Invalid repo name'
-          }
-        },
-      }) as `${ string }/${ string }`
-    assertPrompt(repo)
-    
-    return {
-      targetDir,
-      packageName,
-      description,
-      pkgManager,
-      template,
-      cis,
-      useVitest,
-      useGit,
-      repo,
-    }
+    return ctx.config
   }
 }

@@ -2,22 +2,24 @@
   "name": "@peiyanlu/create-project",
   "version": "0.0.1",
   "description": "A create new project cli tool.",
-  "author": "YanluPei",
   "license": "MIT",
   "type": "module",
+  "private": false,
   "bin": {
-    "create-project": "index.cjs"
+    "create-project": "index.js"
   },
   "scripts": {
     "dev": "tsdown -w",
     "build": "tsdown",
-    "test": "vitest",
-    "test:cov": "vitest --coverage",
+    "test": "vitest run",
+    "test:e2e": "vitest run -c vitest.config.e2e.mts",
+    "test:cov": "vitest run --coverage",
     "prepublish": "tsdown",
     "release": "release-it"
   },
   "dependencies": {
     "@clack/prompts": "^0.11.0",
+    "@peiyanlu/cli-utils": "^0.0.1",
     "ansis": "^4.2.0",
     "commander": "^14.0.2"
   },
@@ -27,11 +29,14 @@
     "@vitest/coverage-v8": "^4.0.15",
     "release-it": "^19.0.2",
     "release-it-pnpm": "^4.6.6",
-    "tsdown": "^0.17.0",
+    "tsdown": "^0.18.1",
     "typescript": "^5.9.3",
     "vitest": "^4.0.15"
   },
-  "private": false,
+  "author": {
+    "name": "YanluPei",
+    "email": "peiyanlu@vip.qq.com"
+  },
   "engines": {
     "node": ">=20.0.0"
   },
@@ -48,12 +53,12 @@
     "type": "git",
     "url": "git+https://github.com/peiyanlu/create-project.git"
   },
-  "homepage": "https://github.com/peiyanlu/create-project",
+  "homepage": "https://github.com/peiyanlu/create-project#readme",
   "bugs": {
     "url": "https://github.com/peiyanlu/create-project/issues"
   },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org",
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   }
 }

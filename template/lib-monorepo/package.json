@@ -1,0 +1,38 @@
+{
+  "name": "@scope/project-monorepo",
+  "description": "",
+  "license": "MIT",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "dev": "pnpm run -r --stream --filter='./packages/*' dev",
+    "build": "pnpm run -r --stream --filter='./packages/*' build",
+    "clean:dist": "pnpm run -r --stream clean:dist",
+    "clean:nms": "pnpm run -r --stream clean:nm && npx rimraf node_modules",
+    "clean:cache": "pnpm store prune",
+    "clean:all": "pnpm run -r --stream clean:dist clean:nm && npx rimraf node_modules && pnpm store prune"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.29.3",
+    "typescript": "^5.8.3",
+    "@types/node": "^24.10.3",
+    "vitest": "^4.0.15",
+    "@vitest/coverage-v8": "^4.0.15"
+  },
+  "author": {
+    "name": "",
+    "email": ""
+  },
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "keywords": [
+    "monorepo",
+    "pnpm"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  }
+}
