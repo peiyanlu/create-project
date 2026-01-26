@@ -50,7 +50,6 @@ export class LibPlugin extends BasePlugin {
     if (useVitest) {
       ctx.setScripts({
         'test': 'vitest run',
-        'test:e2e': 'vitest run -c vitest.config.e2e.mts',
         'test:cov': 'vitest run --coverage',
       })
     }

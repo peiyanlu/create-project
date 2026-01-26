@@ -12,8 +12,8 @@ importers:
         specifier: ^0.11.0
         version: 0.11.0
       '@peiyanlu/cli-utils':
-        specifier: ^0.0.1
-        version: 0.0.1
+        specifier: ^0.0.4
+        version: 0.0.4
       ansis:
         specifier: ^4.2.0
         version: 4.2.0
@@ -470,8 +470,8 @@ packages:
   '@oxc-project/types@0.103.0':
     resolution: {integrity: sha512-bkiYX5kaXWwUessFRSoXFkGIQTmc6dLGdxuRTrC+h8PSnIdZyuXHHlLAeTmOue5Br/a0/a7dHH0Gca6eXn9MKg==}
 
-  '@peiyanlu/cli-utils@0.0.1':
-    resolution: {integrity: sha512-dVAHSbshxbWriutw8ph80DUOspzNJBwMDm5k45DE1q7+X3rwKzv0IPseBw0cZipjNacwTHXrPvI7/jp3iPj6qw==}
+  '@peiyanlu/cli-utils@0.0.4':
+    resolution: {integrity: sha512-HR3xvUmpZT94DTwmMIeD80preNpFNTkxA61SblnNPxEKl7Kxh3cZD/44dP3CLg7aTFnNmAAyvWGyNjo7F0vqkA==}
     engines: {node: '>=20'}
 
   '@phun-ky/typeof@2.0.3':
@@ -2410,7 +2410,7 @@ snapshots:
 
   '@oxc-project/types@0.103.0': {}
 
-  '@peiyanlu/cli-utils@0.0.1': {}
+  '@peiyanlu/cli-utils@0.0.4': {}
 
   '@phun-ky/typeof@2.0.3': {}
 

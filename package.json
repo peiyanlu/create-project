@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@clack/prompts": "^0.11.0",
-    "@peiyanlu/cli-utils": "^0.0.1",
+    "@peiyanlu/cli-utils": "^0.0.4",
     "ansis": "^4.2.0",
     "commander": "^14.0.2"
   },
@@ -42,8 +42,9 @@
   },
   "keywords": [
     "project",
-    "minimum",
-    "cli"
+    "lib",
+    "cli",
+    "app"
   ],
   "files": [
     "dist",

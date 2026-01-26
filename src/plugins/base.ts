@@ -1,5 +1,5 @@
 import { confirm, text } from '@clack/prompts'
-import { CopyOptions, editJsonFile, PkgManager } from '@peiyanlu/cli-utils'
+import { CopyOptions, editJsonFile, isTestFile, PkgManager } from '@peiyanlu/cli-utils'
 import { assertPrompt, RealContext, Tpl } from '../action.js'
 import { MESSAGES } from '../messages.js'
 
@@ -76,11 +76,7 @@ export class BasePlugin implements TemplatePlugin {
         (name: string) => !useCI && ciFiles.includes(name),
         
         // Vitest
-        (name: string) => !useVitest && [
-          /(^|[\\/])(test|tests|__tests__|e2e)([\\/]|$)/,
-          /\.(e2e-)?(test|spec)\.m?(ts|js)$/,
-          /^vitest([-.])(.*)\.m?(ts|js)$/,
-        ].some(reg => reg.test(name)),
+        (name: string) => !useVitest && isTestFile(name),
         
         // pnpm
         (name: string) => !isPnpm && pnpmFiles.includes(name),

@@ -3,13 +3,23 @@ import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   test: {
-    include: [ '**/tests/**/*.{test,spec}.{ts,mts}' ],
+    clearMocks: true,
+    restoreMocks: true,
+    testTimeout: 10000,
     coverage: {
       provider: 'v8',
     },
-    deps: {
-      // we specify 'packages' so Vitest doesn't inline the files
-      moduleDirectories: [ 'node_modules', 'packages' ],
-    },
+    projects: [
+      {
+        test: {
+          name: {
+            label: 'scenario',
+            color: 'green',
+          },
+          setupFiles: [ './tests/setup.ts' ],
+          include: [ '**/tests/**/*.{test,spec}.{ts,mts}' ],
+        },
+      },
+    ],
   },
 })
