@@ -14,8 +14,6 @@ vi.mock('@clack/prompts')
 const mockedText = vi.mocked(text)
 const mockedSelect = vi.mocked(select)
 const mockedConfirm = vi.mocked(confirm)
-const exitSpy = vi.spyOn(process, 'exit')
-  .mockImplementation(() => { throw Error() })
 
 
 const projectName = 'project-starter'
@@ -52,7 +50,7 @@ describe('create: lib (default package name)', () => {
   const ctx = new Context(createDefaultConfig())
   
   beforeEach(async () => {
-    vi.resetAllMocks()
+    vi.clearAllMocks()
     
     await emptyDir(TMP_DIR, [])
     
@@ -114,7 +112,7 @@ describe('create: lib (custom package name)', () => {
   const ctx = new Context(createDefaultConfig())
   
   beforeEach(async () => {
-    vi.resetAllMocks()
+    vi.clearAllMocks()
     
     await emptyDir(TMP_DIR, [])
     
@@ -174,7 +172,7 @@ describe('create: lib (with CLI args)', () => {
   const ctx = new Context(createDefaultConfig())
   
   beforeEach(async () => {
-    vi.resetAllMocks()
+    vi.clearAllMocks()
     
     await makeDirty()
     
@@ -234,7 +232,7 @@ describe('create: exit on non-empty dir', () => {
   const ctx = new Context(createDefaultConfig())
   
   beforeEach(async () => {
-    vi.resetAllMocks()
+    vi.clearAllMocks()
     
     await makeDirty()
     
@@ -249,9 +247,8 @@ describe('create: exit on non-empty dir', () => {
     const action = new Action()
     // provide cmdArgs and options, emulate command-line arguments
     const res = action.handlePrompts(undefined, { overwrite: false }, ctx)
-    await expect(res).rejects.toThrow('process.exit unexpectedly called with "0"')
-    
-    exitSpy.mockRestore()
+    // await expect(res).rejects.toMatchObject({ code: 0 })
+    await expect(res).rejects.toThrow('process.exit(0)')
     
     expect(text).toHaveBeenCalled()
     expect(select).toHaveBeenCalled()
@@ -263,7 +260,7 @@ describe('create: monorepo', () => {
   const ctx = new Context(createDefaultConfig())
   
   beforeEach(async () => {
-    vi.resetAllMocks()
+    vi.clearAllMocks()
     
     await makeDirty()
     
@@ -320,7 +317,7 @@ describe('create: cli', () => {
   const ctx = new Context(createDefaultConfig())
   
   beforeEach(async () => {
-    vi.resetAllMocks()
+    vi.clearAllMocks()
     
     await makeDirty()
     
@@ -380,7 +377,7 @@ describe('create: electron', () => {
   const ctx = new Context(createDefaultConfig())
   
   beforeEach(async () => {
-    vi.resetAllMocks()
+    vi.clearAllMocks()
     
     await makeDirty()
     
@@ -437,7 +434,7 @@ describe('create: react', () => {
   const ctx = new Context(createDefaultConfig())
   
   beforeEach(async () => {
-    vi.resetAllMocks()
+    vi.clearAllMocks()
     
     await makeDirty()
     

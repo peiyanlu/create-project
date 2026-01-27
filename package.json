@@ -12,7 +12,6 @@
     "dev": "tsdown -w",
     "build": "tsdown",
     "test": "vitest run",
-    "test:e2e": "vitest run -c vitest.config.e2e.mts",
     "test:cov": "vitest run --coverage",
     "prepublish": "tsdown",
     "release": "release-it"
