@@ -2,6 +2,7 @@ import { cancel, intro, isCancel, outro, select, tasks, text } from '@clack/prom
 import {
   checkVersion,
   type CliOptions,
+  ConfirmResult,
   copyDirAsync,
   editFile,
   emptyDir,
@@ -13,7 +14,6 @@ import {
   PkgManager,
   toValidPackageName,
   toValidProjectName,
-  ConfirmResult,
 } from '@peiyanlu/cli-utils'
 import { cyan, gray } from 'ansis'
 import { existsSync } from 'node:fs'
@@ -249,7 +249,7 @@ export class Action {
         initialValue: toValidPackageName(pkgName),
         placeholder: toValidPackageName(pkgName),
         validate(val) {
-          if (!isValidPackageName(val)) {
+          if (!val || !isValidPackageName(val)) {
             return 'Invalid'
           }
         },

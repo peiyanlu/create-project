@@ -49,7 +49,7 @@ jobs:
         run: pnpm build
       
       - name: Release
-        run: pnpm exec release-it --ci
+        run: pnpm exec release --ci
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

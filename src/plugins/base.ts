@@ -42,7 +42,7 @@ export class BasePlugin implements TemplatePlugin {
       placeholder: defRepo,
       validate(str) {
         const regex = /^[a-zA-Z0-9-_]+\/[a-zA-Z0-9-_]+$/
-        if (!regex.test(str)) {
+        if (!str || !regex.test(str)) {
           return 'Invalid (user/repo)'
         }
       },
@@ -57,7 +57,7 @@ export class BasePlugin implements TemplatePlugin {
     ]
     const ciFiles: string[] = [
       '_github',
-      '_release-it.json',
+      'release.config.ts',
       'renovate.json',
     ]
     const isPnpm = pkgManager === PkgManager.PNPM
@@ -68,7 +68,6 @@ export class BasePlugin implements TemplatePlugin {
         _npmrc: '.npmrc',
         // CI
         _github: '.github',
-        '_release-it.json': '.release-it.json',
       },
       
       skips: [

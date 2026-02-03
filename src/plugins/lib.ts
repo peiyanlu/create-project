@@ -1,5 +1,5 @@
 import { confirm } from '@clack/prompts'
-import { checkVersion, editJsonFile, PkgManager } from '@peiyanlu/cli-utils'
+import { checkVersion } from '@peiyanlu/cli-utils'
 import { assertPrompt, RealContext, Tpl } from '../action.js'
 import { MESSAGES } from '../messages.js'
 import { BasePlugin } from './base.js'
@@ -18,27 +18,15 @@ export class LibPlugin extends BasePlugin {
   }
   
   async afterCopy(ctx: RealContext): Promise<void> {
-    const { useCI, pkgManager, useVitest } = ctx.config
-    
-    const isPnpm = pkgManager === PkgManager.PNPM
+    const { useCI, useVitest } = ctx.config
     
     if (!useCI) {
       ctx.removeDevDeps([
-        'release-it',
-        'release-it-pnpm',
-        '@release-it/conventional-changelog',
+        '@peiyanlu/release',
       ])
     }
     if (useCI) {
-      ctx.setScripts({ 'release': 'release-it' })
-      
-      if (!isPnpm) {
-        ctx.removeDevDeps([ 'release-it-pnpm' ])
-        
-        await editJsonFile('.release-it.json', json => {
-          delete json.plugins['release-it-pnpm']
-        })
-      }
+      ctx.setScripts({ 'release': 'release' })
     }
     
     if (!useVitest) {
