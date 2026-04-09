@@ -3,7 +3,6 @@ import { Ansis, blueBright, cyan, gray, greenBright, magenta, red, redBright, ye
 import { program } from 'commander'
 import { join } from 'node:path'
 import { Action, Tpl } from './action.js'
-import { __dirname } from './utils.js'
 
 
 const pkg = readJsonFile(join(__dirname, '..', 'package.json'))

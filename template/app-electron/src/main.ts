@@ -6,7 +6,7 @@ import {
   isDev,
   onChildWindowOpenUrl,
   showAndFocus,
-} from '@peiyanlu/electron-ipc/backend'
+} from '@peiyanlu/electron/backend'
 import { app, BrowserWindow, dialog, globalShortcut, Menu } from 'electron'
 import { join } from 'path'
 
@@ -56,7 +56,7 @@ ElectronHost.openMainWindow({
         {
           label: '打开',
           click: () => {
-            showAndFocus(ElectronHost.mainWindow)
+            showAndFocus(ElectronHost.mainWindow!)
           },
         },
         {

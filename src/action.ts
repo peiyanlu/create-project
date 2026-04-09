@@ -24,7 +24,6 @@ import { MESSAGES } from './messages.js'
 import { ElectronAppPlugin, ReactAppPlugin } from './plugins/app.js'
 import { TemplatePlugin } from './plugins/base.js'
 import { LibCliPlugin, LibMonorepoPlugin, LibPlugin, LibPluginPlugin } from './plugins/lib.js'
-import { __dirname } from './utils.js'
 
 
 export interface PromptsResult {

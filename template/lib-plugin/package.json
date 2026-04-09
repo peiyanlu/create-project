@@ -20,12 +20,12 @@
     "prepublish": "tsdown"
   },
   "devDependencies": {
-    "@peiyanlu/release": "^0.0.7",
-    "typescript": "^5.9.3",
-    "@types/node": "^25.2.0",
-    "vitest": "^4.0.18",
-    "@vitest/coverage-v8": "^4.0.18",
-    "tsdown": "^0.20.1"
+    "@peiyanlu/release": "^0.0.8",
+    "typescript": "^6.0.2",
+    "@types/node": "^25.5.2",
+    "vitest": "^4.1.3",
+    "@vitest/coverage-v8": "^4.1.3",
+    "tsdown": "^0.21.7"
   },
   "author": {
     "name": "",

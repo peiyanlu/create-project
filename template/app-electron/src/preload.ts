@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron'
-import { frontendApiKey, getFrontendApi } from '@peiyanlu/electron-ipc/preload'
+import { frontendApiKey, getFrontendApi } from '@peiyanlu/electron/preload'
 
 
 contextBridge.exposeInMainWorld(frontendApiKey, getFrontendApi(ipcRenderer))
@@ -11,6 +11,6 @@ window.addEventListener('DOMContentLoaded', () => {
   }
   
   for (const dependency of [ 'chrome', 'node', 'electron' ]) {
-    replaceText(`${ dependency }-version`, process.versions[dependency])
+    replaceText(`${ dependency }-version`, process.versions[dependency]!)
   }
 })
