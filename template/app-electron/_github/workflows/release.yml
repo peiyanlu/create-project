@@ -27,7 +27,7 @@ jobs:
           ref: ${{ github.ref }}
       
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
           version: 10
       
@@ -36,7 +36,7 @@ jobs:
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org/
-          cache: pnpm
+          package-manager-cache: false
       
       - name: Install Deps
         run: pnpm install
