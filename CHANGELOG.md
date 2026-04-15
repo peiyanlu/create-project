@@ -1,3 +1,16 @@
+## <small>[0.0.4](https://github.com/peiyanlu/create-project/compare/0.0.3...0.0.4) (2026-04-15)</small>
+
+### ✨ 新功能
+
+* 模板文件更新 ([7f94200](https://github.com/peiyanlu/create-project/commit/7f9420032a3f8a5777cedac3aadd625295ac7538))
+
+### 🎫 其他更新
+
+* 依赖更新 ([4207395](https://github.com/peiyanlu/create-project/commit/42073959a32858bd2d04cba998236f6573c984f5))
+
+### 🔧 CI 配置
+
+* 配置更新 ([f12fb7b](https://github.com/peiyanlu/create-project/commit/f12fb7b5013dff769d9fadccbe70658b1a28ebc9))
 ## <small>[0.0.3](https://github.com/peiyanlu/create-project/compare/0.0.2...0.0.3) (2026-02-03)</small>
 
 ### ✨ 新功能
