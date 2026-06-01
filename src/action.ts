@@ -322,7 +322,7 @@ export class Action {
           PkgManager.YARN,
         ].map(async k => {
           const version = await checkVersion(k)
-          return { label: k, value: k, hint: version }
+          return { label: k, value: k, hint: version?.trim() }
         }))).filter(k => k.hint),
       }) as PkgManager
     assertPrompt(ctx.config.pkgManager)

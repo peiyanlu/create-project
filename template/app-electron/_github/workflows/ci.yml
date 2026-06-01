@@ -7,6 +7,40 @@ on:
 
 jobs:
   noop:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ windows-latest, macos-latest, ubuntu-latest ]
+    
+    runs-on: ${{ matrix.os }}
+    
     steps:
-      - run: echo "✅ This check always succeeds."
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+          ref: ${{ github.ref }}
+      
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 11
+      
+      - name: Install Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24.15.0
+          registry-url: https://registry.npmjs.org/
+          package-manager-cache: false
+      
+      - name: Install Deps
+        run: pnpm install --frozen-lockfile
+      
+      - name: Make App
+        run: pnpm exec electron-forge make
+      
+      - name: Verify Output
+        shell: bash
+        run: |
+          ls -R out

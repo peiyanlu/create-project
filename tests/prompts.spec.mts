@@ -18,7 +18,7 @@ const mockedConfirm = vi.mocked(confirm)
 
 const projectName = 'project-starter'
 const description = 'A new project description.'
-const repo = `__USER__/${ projectName }`
+const repo = `__OWNER__/${ projectName }`
 
 const CWD = process.cwd()
 const TMP_CWD = resolve(__dirname, '.tmp')
@@ -140,7 +140,7 @@ describe('create: lib (custom package name)', () => {
     mockedConfirm.mockResolvedValueOnce(true)
     
     // repo
-    mockedText.mockResolvedValueOnce(`__USER__/${ packageName }`)
+    mockedText.mockResolvedValueOnce(`__OWNER__/${ packageName }`)
     
     // useVitest
     mockedConfirm.mockResolvedValueOnce(false)
@@ -161,7 +161,7 @@ describe('create: lib (custom package name)', () => {
       pkgManager: PkgManager.NPM,
       template: Tpl.Lib,
       useCI: true,
-      repo: `__USER__/${ packageName }`,
+      repo: `__OWNER__/${ packageName }`,
       useVitest: false,
     })
   })

@@ -1,7 +1,7 @@
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
   font-weight: 400;
+  font-size: 12px;
   
   color-scheme: light dark;
   color: rgba(var(--primary-color), 1);
@@ -30,12 +30,16 @@
   
   &::-webkit-scrollbar-track {
     border-radius: calc(var(--scrollbar-width) / 2);
-    background-color: transparent;
+    background-color: rgba(var(--primary-background-color), 1);
   }
   
   &::-webkit-scrollbar-thumb {
     border-radius: var(--scrollbar-width);
-    background-color: var(--scrollbar-thumb-color);
+    background-color: rgba(var(--primary-color), .35);
+  }
+  
+  &::-webkit-scrollbar-corner {
+    background: transparent;
   }
 }
 
@@ -49,7 +53,6 @@ html, body, #app {
   :root {
     --primary-color: 33, 53, 71;
     --primary-background-color: 254, 247, 255;
-    --scrollbar-thumb-color: rgba(241, 241, 241, 1);
   }
 }
 
@@ -57,6 +60,5 @@ html, body, #app {
   :root {
     --primary-color: 231, 225, 234;
     --primary-background-color: 20, 18, 24;
-    --scrollbar-thumb-color: rgba(66, 66, 66, 1);
   }
 }

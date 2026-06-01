@@ -1,5 +1,3 @@
 packages:
   - 'packages/*'
-  - '!**/test/**'
-
-neverBuiltDependencies: [ ]
+  - '!**/tests/**'

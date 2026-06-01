@@ -3,7 +3,6 @@ import { MakerDMG } from '@electron-forge/maker-dmg'
 import { MakerRpm } from '@electron-forge/maker-rpm'
 import { MakerSquirrel } from '@electron-forge/maker-squirrel'
 import { MakerZIP } from '@electron-forge/maker-zip'
-import { AutoUnpackNativesPlugin } from '@electron-forge/plugin-auto-unpack-natives'
 import { FusesPlugin } from '@electron-forge/plugin-fuses'
 import { VitePlugin } from '@electron-forge/plugin-vite'
 import type { ForgeConfig } from '@electron-forge/shared-types'
@@ -36,7 +35,6 @@ export default {
   makers: [
     // Windows
     new MakerSquirrel({}),
-    // new MakerMSIX({}),
     // 全平台都可用
     new MakerZIP({}),
     // Mac 标准格式
@@ -45,12 +43,14 @@ export default {
     new MakerRpm({
       options: {
         icon: joinPath('icon.png'),
+        bin: executableName,
       },
     }),
     // Linux debian，ubuntu
     new MakerDeb({
       options: {
         icon: joinPath('icon.png'),
+        bin: executableName,
       },
     }),
   ],
@@ -75,7 +75,6 @@ export default {
         },
       ],
     }),
-    new AutoUnpackNativesPlugin({}),
     new FusesPlugin({
       version: FuseVersion.V1,
       [FuseV1Options.RunAsNode]: false,
@@ -92,8 +91,8 @@ export default {
       platforms: [ 'all' ],
       config: {
         repository: {
-          owner: '__USER__',
-          name: '__REPO__',
+          owner: '__OWNER__',
+          name: '__NAME__',
         },
         draft: false,
         prerelease: false,

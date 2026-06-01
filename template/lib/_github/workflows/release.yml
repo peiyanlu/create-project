@@ -23,12 +23,12 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v6
         with:
-          version: 10.24.0
+          version: 11
       
       - name: Install Node
         uses: actions/setup-node@v6
         with:
-          node-version: 24.11.1
+          node-version: 24
           registry-url: https://registry.npmjs.org/
           package-manager-cache: false
       

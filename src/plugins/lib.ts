@@ -8,7 +8,7 @@ import { BasePlugin } from './base.js'
 export class LibPlugin extends BasePlugin {
   name = Tpl.Lib
   
-  async extendPrompts(ctx: RealContext) {
+  override async extendPrompts(ctx: RealContext) {
     await super.extendPrompts(ctx)
     
     ctx.config.useVitest = await confirm({
@@ -17,7 +17,7 @@ export class LibPlugin extends BasePlugin {
     assertPrompt(ctx.config.useVitest)
   }
   
-  async afterCopy(ctx: RealContext): Promise<void> {
+  override async afterCopy(ctx: RealContext): Promise<void> {
     const { useCI, useVitest } = ctx.config
     
     if (!useCI) {
@@ -53,7 +53,7 @@ export class LibPluginPlugin extends LibPlugin {
 export class LibCliPlugin extends LibPlugin {
   name = Tpl.Cli
   
-  async afterCopy(ctx: RealContext): Promise<void> {
+  override async afterCopy(ctx: RealContext): Promise<void> {
     const { packageName } = ctx.config
     
     ctx.enqueueCommand([
@@ -67,11 +67,11 @@ export class LibCliPlugin extends LibPlugin {
 export class LibMonorepoPlugin extends LibPlugin {
   name = Tpl.Monorepo
   
-  public requiresPnpm(): boolean {
+  override requiresPnpm(): boolean {
     return true
   }
   
-  async afterCopy(ctx: RealContext): Promise<void> {
+  override async afterCopy(ctx: RealContext): Promise<void> {
     const { useCI } = ctx.config
     
     if (!useCI) {
@@ -96,7 +96,7 @@ export class LibMonorepoPlugin extends LibPlugin {
     await super.afterCopy(ctx)
   }
   
-  getDoneMessage(prefix: string): string {
+  override getDoneMessage(prefix: string): string {
     let msg = '\n'
     msg += `${ prefix } pnpm cs:init`
     return msg

@@ -29,19 +29,26 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v6
         with:
-          version: 10
+          version: 11
       
-      - name: Install Node.js
+      - name: Install Node
         uses: actions/setup-node@v6
         with:
-          node-version: 24
+          node-version: 24.15.0
           registry-url: https://registry.npmjs.org/
           package-manager-cache: false
       
       - name: Install Deps
-        run: pnpm install
+        run: |
+          pnpm config list
+          pnpm install --frozen-lockfile
       
       - name: Publish App
         run: pnpm exec electron-forge publish --no-git-checks
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Verify Output
+        shell: bash
+        run: |
+          ls -R out

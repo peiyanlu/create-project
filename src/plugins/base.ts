@@ -35,7 +35,7 @@ export class BasePlugin implements TemplatePlugin {
     }) as boolean
     assertPrompt(ctx.config.useCI)
     
-    const defRepo = `__USER__/${ packageName }`
+    const defRepo = `__OWNER__/${ packageName }`
     ctx.config.repo = await text({
       message: MESSAGES.PROJECT_REPO_QUESTION,
       initialValue: defRepo,

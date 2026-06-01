@@ -1,3 +1,1 @@
-neverBuiltDependencies: [ ]
-
-#dlxCacheMaxAge = 60
+dlxCacheMaxAge: 60
