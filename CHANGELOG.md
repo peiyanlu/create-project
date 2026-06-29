@@ -1,3 +1,13 @@
+## <small>[0.0.5](https://github.com/peiyanlu/create-project/compare/0.0.4...0.0.5) (2026-06-29)</small>
+
+### ✨ 新功能
+
+* 模板文件更新 ([860eeae](https://github.com/peiyanlu/create-project/commit/860eeae3d4988725f4f757dc14affdf03d0943fa))
+
+### 🧹 其他更新
+
+* 依赖更新 ([5e9a7e2](https://github.com/peiyanlu/create-project/commit/5e9a7e2c5a918ae35ec692e13899de1e81b93fa5))
+
 ## <small>[0.0.4](https://github.com/peiyanlu/create-project/compare/0.0.3...0.0.4) (2026-04-15)</small>
 
 ### ✨ 新功能
