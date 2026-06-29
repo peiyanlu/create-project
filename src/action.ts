@@ -7,7 +7,7 @@ import {
   editFile,
   emptyDir,
   execAsync,
-  getGitConfig,
+  gitConfigGet,
   isEmpty,
   isGitRepo,
   isValidPackageName,
@@ -147,7 +147,7 @@ export class Action {
           process.chdir(targetDir)
           await scheduler.yield()
           
-          const [ name, email ] = await Promise.all([ 'user.name', 'user.email' ].map(k => getGitConfig(k)))
+          const [ name, email ] = await Promise.all([ 'user.name', 'user.email' ].map(k => gitConfigGet(k)))
           
           // -----------------------------------------------------
           await editFile('./README.md', content => {
@@ -162,8 +162,8 @@ export class Action {
           })
           await editFile('./LICENSE', content => {
             return content
-              .replace(/^\$YEAR$/g, new Date().getFullYear().toString())
-              .replace(/^\$OWNER$/g, name ?? 'OWNER')
+              .replace(/\$YEAR/g, String(new Date().getFullYear()))
+              .replace(/\$OWNER/g, name ?? 'OWNER')
           })
           
           await plugin.afterCopy(ctx)
@@ -322,7 +322,7 @@ export class Action {
           PkgManager.YARN,
         ].map(async k => {
           const version = await checkVersion(k)
-          return { label: k, value: k, hint: version?.trim() }
+          return { label: k, value: k, hint: version }
         }))).filter(k => k.hint),
       }) as PkgManager
     assertPrompt(ctx.config.pkgManager)
