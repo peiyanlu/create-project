@@ -16,17 +16,17 @@
     "release": "release"
   },
   "dependencies": {
-    "@clack/prompts": "^1.4.0",
-    "@peiyanlu/cli-utils": "^0.0.8",
-    "ansis": "^4.2.0",
+    "@clack/prompts": "^1.6.0",
+    "@peiyanlu/cli-utils": "^0.0.11",
+    "ansis": "^4.3.1",
     "commander": "^14.0.3"
   },
   "devDependencies": {
-    "@peiyanlu/release": "^0.0.12",
+    "@peiyanlu/release": "^0.0.15",
     "@types/node": "^24.12.2",
-    "tsdown": "^0.22.0",
+    "tsdown": "^0.22.3",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.7"
+    "vitest": "^4.1.9"
   },
   "author": {
     "name": "YanluPei",
