@@ -6,7 +6,7 @@
 
 ### 🧹 其他更新
 
-* 依赖更新 ([5e9a7e2](https://github.com/peiyanlu/create-project/commit/5e9a7e2c5a918ae35ec692e13899de1e81b93fa5))
+* 依赖更新 ([aa7dfb1](https://github.com/peiyanlu/create-project/commit/aa7dfb13480231ea6ba54d8a1873e835fdbc8299))
 
 ## <small>[0.0.4](https://github.com/peiyanlu/create-project/compare/0.0.3...0.0.4) (2026-04-15)</small>
 

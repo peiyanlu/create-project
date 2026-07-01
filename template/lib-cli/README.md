@@ -1,39 +1,26 @@
 # $PACKAGE_NAME
 
 
+[![module](https://img.shields.io/badge/package-ESM--CJS-FFE536.svg)](https://nodejs.org/api/esm.html)
+[![npm](https://img.shields.io/npm/v/$PACKAGE_NAME.svg)](https://npmjs.com/package/$PACKAGE_NAME)
+[![node](https://img.shields.io/node/v/$PACKAGE_NAME.svg)](https://nodejs.org)
+[![size](https://packagephobia.com/badge?p=$PACKAGE_NAME)](https://packagephobia.com/result?p=$PACKAGE_NAME)
+[![deps](https://img.shields.io/librariesio/release/npm/$PACKAGE_NAME)](https://libraries.io/npm/$ENCODE_PACKAGE_NAME)$BADGE_START
+[![build](https://img.shields.io/github/actions/workflow/status/$REPO/test.yaml?branch=master)](https://github.com/$REPO/actions)
+[![coverage](https://coveralls.io/repos/github/$REPO/badge.svg?branch=master)](https://coveralls.io/github/$REPO?branch=master)
+
+$BADGE_END
+
 $DESCRIPTION
 
+## Installation
 
-## Project setup
-
-```bash
-$ $INSTALL
+```shell
+$ADD $PACKAGE_NAME
 ```
 
-## Compile and run the project
+## Usage
 
-```bash
-# development
-$ $RUN dev
-
-# production
-$ $RUN build
+```ts
+import {} from '$PACKAGE_NAME'
 ```
-
-$START
-
-
-## Run tests
-
-```bash
-# unit tests
-$ $RUN test
-
-# e2e tests
-$ $RUN test:e2e
-
-# test coverage
-$ $RUN test:cov
-```
-
-$END

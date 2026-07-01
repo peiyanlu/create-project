@@ -4,10 +4,8 @@ import {
   type CliOptions,
   ConfirmResult,
   copyDirAsync,
-  editFile,
   emptyDir,
   execAsync,
-  gitConfigGet,
   isEmpty,
   isGitRepo,
   isValidPackageName,
@@ -121,7 +119,7 @@ export class Action {
     
     const ctx = new Context(createDefaultConfig())
     const config = await this.handlePrompts(cmdArgs, options, ctx)
-    const { targetDir, pkgManager, template, packageName, description, useVitest } = config
+    const { targetDir, pkgManager, template } = config
     
     if (options.dryRun) {
       outro(MESSAGES.DRY_RUN_MODE)
@@ -147,45 +145,14 @@ export class Action {
           process.chdir(targetDir)
           await scheduler.yield()
           
-          const [ name, email ] = await Promise.all([ 'user.name', 'user.email' ].map(k => gitConfigGet(k)))
-          
           // -----------------------------------------------------
-          await editFile('./README.md', content => {
-            const isYarn = pkgManager === PkgManager.YARN
-            return content
-              .replace(/\$PACKAGE_NAME/g, packageName)
-              .replace(/\$DESCRIPTION/g, description)
-              .replace(/\$INSTALL/g, isYarn ? PkgManager.YARN : `${ pkgManager } install`)
-              .replace(/\$RUN/g, isYarn ? PkgManager.YARN : `${ pkgManager } run`)
-              .replace(/\$START([\s\S]*?)\$END/g, (_, $1) => useVitest ? $1 : '')
-              .replace(/(\r?\n){3,}/g, '\r\n'.repeat(2))
-          })
-          await editFile('./LICENSE', content => {
-            return content
-              .replace(/\$YEAR/g, String(new Date().getFullYear()))
-              .replace(/\$OWNER/g, name ?? 'OWNER')
-          })
-          
           await plugin.afterCopy(ctx)
           await plugin.afterAll(ctx)
+          await scheduler.yield()
           
           // -----------------------------------------------------
-          const cmdArr = [
-            `npm pkg set name="${ packageName }" description="${ description }"`,
-            `npm pkg set author.name="${ name }" author.email="${ email }"`,
-          ]
-          
           const isRepo = await isGitRepo()
-          if (!isRepo) {
-            cmdArr.push(...[
-              'git init',
-              'git branch -M master',
-            ])
-          }
-          for (const cmd of cmdArr) {
-            await execAsync(cmd)
-            await scheduler.yield()
-          }
+          if (!isRepo) await execAsync('git init -b master')
           
           return MESSAGES.PROJECT_INFORMATION_END
         },

@@ -1,5 +1,5 @@
 import { confirm, text } from '@clack/prompts'
-import { CopyOptions, editJsonFile, isTestFile, PkgManager } from '@peiyanlu/cli-utils'
+import { CopyOptions, editFile, editJsonFile, gitConfigGet, isTestFile, PkgManager } from '@peiyanlu/cli-utils'
 import { assertPrompt, RealContext, Tpl } from '../action.js'
 import { MESSAGES } from '../messages.js'
 
@@ -68,6 +68,7 @@ export class BasePlugin implements TemplatePlugin {
       'renovate.json',
     ]
     const isPnpm = pkgManager === PkgManager.PNPM
+    const testActions = [ 'test.yaml' ]
     
     return {
       rename: {
@@ -80,6 +81,7 @@ export class BasePlugin implements TemplatePlugin {
       skips: [
         // CI
         (name: string) => !useCI && ciFiles.includes(name),
+        (name: string) => (useCI && !useVitest) && testActions.includes(name),
         
         // Vitest
         (name: string) => !useVitest && isTestFile(name),
@@ -93,18 +95,46 @@ export class BasePlugin implements TemplatePlugin {
   async beforeCopy(ctx: RealContext) {}
   
   async afterCopy(ctx: RealContext) {
-    const { repo } = ctx.config
+    const { repo, packageName, description, pkgManager, useVitest, useCI } = ctx.config
+    const [ name, email ] = await Promise.all([ 'user.name', 'user.email' ].map(k => gitConfigGet(k)))
     
-    if (repo) {
-      await editJsonFile('./package.json', (pkg) => {
+    await editJsonFile('./package.json', (pkg) => {
+      pkg.name = packageName
+      pkg.description = description
+      pkg.author.name = name
+      pkg.author.email = email
+      
+      if (repo) {
         pkg.repository = {
           type: 'git',
           url: `https://github.com/${ repo }.git`,
         }
         pkg.bugs = { url: `https://github.com/${ repo }/issues` }
         pkg.homepage = `https://github.com/${ repo }#readme`
-      })
-    }
+      }
+    })
+    
+    await editFile('./README.md', content => {
+      const isYarn = pkgManager === PkgManager.YARN
+      const isNpm = pkgManager === PkgManager.NPM
+      return content
+        .replace(/\$PACKAGE_NAME/g, packageName)
+        .replace(/\$ENCODE_PACKAGE_NAME/g, encodeURIComponent(packageName))
+        .replace(/\$DESCRIPTION/g, description)
+        .replace(/\$INSTALL/g, isYarn ? PkgManager.YARN : `${ pkgManager } install`)
+        .replace(/\$RUN/g, isYarn ? PkgManager.YARN : `${ pkgManager } run`)
+        .replace(/\$ADD/g, `${ pkgManager } ${ isNpm ? 'install' : 'add' }`)
+        .replace(/\$REPO/g, repo)
+        .replace(/\$START([\s\S]*?)\$END/g, (_, $1) => useVitest ? $1 : '')
+        .replace(/\$BADGE_START([\s\S]*?)\$BADGE_END/g, (_, $1) => (useCI && useVitest) ? $1 : '')
+        .replace(/(\r?\n){3,}/g, '\r\n'.repeat(2))
+    })
+    
+    await editFile('./LICENSE', content => {
+      return content
+        .replace(/\$YEAR/g, String(new Date().getFullYear()))
+        .replace(/\$OWNER/g, name ?? 'OWNER')
+    })
   }
   
   async afterAll(ctx: RealContext): Promise<void> {
