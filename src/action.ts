@@ -13,7 +13,7 @@ import {
   toValidPackageName,
   toValidProjectName,
 } from '@peiyanlu/cli-utils'
-import { cyan, gray } from 'ansis'
+import { cyan, dim } from 'ansis'
 import { existsSync } from 'node:fs'
 import { basename, relative, resolve } from 'node:path'
 import { scheduler } from 'node:timers/promises'
@@ -161,7 +161,7 @@ export class Action {
     
     let doneMessage = '🎉  Done. Now run:\n'
     const cdProjectName = relative(cwd, target)
-    const prefix = `\n  ${ gray('$') }`
+    const prefix = `\n  ${ dim('$') }`
     if (target !== cwd) {
       const dir = cdProjectName.includes(' ') ? `"${ cdProjectName }"` : cdProjectName
       doneMessage += `${ prefix } ${ cyan('cd') } ${ dir }\n`

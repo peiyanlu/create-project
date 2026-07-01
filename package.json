@@ -17,12 +17,12 @@
   },
   "dependencies": {
     "@clack/prompts": "^1.6.0",
-    "@peiyanlu/cli-utils": "^0.0.12",
+    "@peiyanlu/cli-utils": "^0.0.13",
     "ansis": "^4.3.1",
     "commander": "^15.0.0"
   },
   "devDependencies": {
-    "@peiyanlu/release": "^0.0.16",
+    "@peiyanlu/release": "^1.1.0",
     "@types/node": "^24.13.2",
     "tsdown": "^0.22.3",
     "typescript": "^6.0.3",
@@ -33,7 +33,7 @@
     "email": "peiyanlu@vip.qq.com"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22"
   },
   "keywords": [
     "project",

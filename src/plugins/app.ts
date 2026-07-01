@@ -33,9 +33,7 @@ export class ElectronAppPlugin extends BasePlugin {
         .replace('__NAME__', name)
     })
     
-    
-    const guidDev: UUID = randomUUID()
-    const guidProd: UUID = randomUUID()
+    const [ guidDev, guidProd ] = Array.from({ length: 2 }, (): UUID => randomUUID())
     
     await editFile('./src/main.ts', content => {
       return content

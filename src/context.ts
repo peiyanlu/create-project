@@ -27,11 +27,11 @@ export class Context<TConfig> {
   }
   
   async applyChanges() {
-    const del = this.depsToRemove.map(k => `dependencies[${ k }]`)
-      .concat(this.devDepsToRemove.map(k => `devDependencies[${ k }]`))
+    const del = this.depsToRemove.map(k => `dependencies["${ k }"]`)
+      .concat(this.devDepsToRemove.map(k => `devDependencies["${ k }"]`))
       .join(' ')
     const add = Object.entries(this.scriptsToSet)
-      .map(([ k, v ]) => `scripts.${ k }="${ v }"`)
+      .map(([ k, v ]) => `scripts."${ k }"="${ v }"`)
       .join(' ')
     
     if (del) this.enqueueCommand([ `npm pkg delete ${ del }` ])

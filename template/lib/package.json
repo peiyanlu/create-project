@@ -20,19 +20,19 @@
     "prepublish": "tsdown"
   },
   "devDependencies": {
-    "@peiyanlu/release": "^0.0.12",
-    "typescript": "^6.0.2",
-    "@types/node": "^24.12.4",
-    "vitest": "^4.1.7",
-    "@vitest/coverage-v8": "^4.1.7",
-    "tsdown": "^0.22.0"
+    "@peiyanlu/release": "^1.0.0",
+    "@types/node": "^24.13.2",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.9",
+    "@vitest/coverage-v8": "^4.1.9",
+    "tsdown": "^0.22.3"
   },
   "author": {
     "name": "",
     "email": ""
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "keywords": [
     "typescript",

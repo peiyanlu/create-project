@@ -1,4 +1,4 @@
-## <small>[0.0.5](https://github.com/peiyanlu/create-project/compare/0.0.4...0.0.5) (2026-06-29)</small>
+## <small>[0.0.5](https://github.com/peiyanlu/create-project/compare/v0.0.4...v0.0.5) (2026-07-01)</small>
 
 ### ✨ 新功能
 
@@ -8,7 +8,7 @@
 
 * 依赖更新 ([aa7dfb1](https://github.com/peiyanlu/create-project/commit/aa7dfb13480231ea6ba54d8a1873e835fdbc8299))
 
-## <small>[0.0.4](https://github.com/peiyanlu/create-project/compare/0.0.3...0.0.4) (2026-04-15)</small>
+## <small>[0.0.4](https://github.com/peiyanlu/create-project/compare/v0.0.3...v0.0.4) (2026-04-15)</small>
 
 ### ✨ 新功能
 
@@ -22,7 +22,7 @@
 
 * 配置更新 ([f12fb7b](https://github.com/peiyanlu/create-project/commit/f12fb7b5013dff769d9fadccbe70658b1a28ebc9))
 
-## <small>[0.0.3](https://github.com/peiyanlu/create-project/compare/0.0.2...0.0.3) (2026-02-03)</small>
+## <small>[0.0.3](https://github.com/peiyanlu/create-project/compare/v0.0.2...v0.0.3) (2026-02-03)</small>
 
 ### ✨ 新功能
 
@@ -37,7 +37,7 @@
 
 * 替换 release 工具 ([4d99418](https://github.com/peiyanlu/create-project/commit/4d99418fc639c06b0f10b268b17236544e794382))
 
-## <small>[0.0.2](https://github.com/peiyanlu/create-project/compare/0.0.1...0.0.2) (2025-12-21)</small>
+## <small>[0.0.2](https://github.com/peiyanlu/create-project/compare/v0.0.1...v0.0.2) (2025-12-21)</small>
 
 ### 💄 样式调整
 

@@ -1,5 +1,5 @@
 import { confirm } from '@clack/prompts'
-import { checkVersion } from '@peiyanlu/cli-utils'
+import { isScopedPackageName } from '@peiyanlu/cli-utils'
 import { assertPrompt, RealContext, Tpl } from '../action.js'
 import { MESSAGES } from '../messages.js'
 import { BasePlugin } from './base.js'
@@ -56,8 +56,12 @@ export class LibCliPlugin extends LibPlugin {
   override async afterCopy(ctx: RealContext): Promise<void> {
     const { packageName } = ctx.config
     
+    const name = isScopedPackageName(packageName)
+      ? packageName.split('/')[1]
+      : packageName
+    
     ctx.enqueueCommand([
-      `npm pkg set bin.${ packageName }="index.js"`,
+      `npm pkg set bin."${ name }"="index.js"`,
     ])
     
     await super.afterCopy(ctx)
@@ -84,13 +88,6 @@ export class LibMonorepoPlugin extends LibPlugin {
         'cs:version': 'changeset version',
         'cs:publish': 'changeset publish',
       })
-    }
-    
-    const pnpmVersion = await checkVersion('pnpm')
-    if (pnpmVersion) {
-      ctx.enqueueCommand([
-        `npm pkg set packageManager="pnpm@${ pnpmVersion }"`,
-      ])
     }
     
     await super.afterCopy(ctx)

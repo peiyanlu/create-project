@@ -1,3 +1,4 @@
+import { log } from '@clack/prompts'
 import { readJsonFile } from '@peiyanlu/cli-utils'
 import { Ansis, blueBright, cyan, gray, greenBright, magenta, red, redBright, yellow } from 'ansis'
 import { program } from 'commander'
@@ -27,6 +28,10 @@ program
   .option('-t, --template <template>', 'Use a specific template.', undefined)
   .action(async (argName: string, options: Record<string, boolean | string>) => {
     await new Action().handle(argName, options)
+      .catch(error => {
+        log.error( error.stack)
+        throw error
+      })
   })
   .helpOption('-h, --help', 'Output usage information.')
   .addHelpText(

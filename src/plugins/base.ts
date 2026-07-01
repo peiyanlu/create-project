@@ -1,5 +1,14 @@
 import { confirm, text } from '@clack/prompts'
-import { CopyOptions, editFile, editJsonFile, gitConfigGet, isTestFile, PkgManager } from '@peiyanlu/cli-utils'
+import {
+  checkVersion,
+  type CopyOptions,
+  editFile,
+  editJsonFile,
+  gitConfigGet,
+  isScopedPackageName,
+  isTestFile,
+  PkgManager,
+} from '@peiyanlu/cli-utils'
 import { assertPrompt, RealContext, Tpl } from '../action.js'
 import { MESSAGES } from '../messages.js'
 
@@ -35,10 +44,7 @@ export class BasePlugin implements TemplatePlugin {
     }) as boolean
     assertPrompt(ctx.config.useCI)
     
-    const isScopedPackage = (name: string) =>
-      /^@[a-z0-9-]+\/[a-z0-9._-]+$/.test(name)
-    
-    const name = isScopedPackage(packageName)
+    const name = isScopedPackageName(packageName)
       ? packageName.split('/')[1]
       : packageName
     
@@ -98,7 +104,11 @@ export class BasePlugin implements TemplatePlugin {
     const { repo, packageName, description, pkgManager, useVitest, useCI } = ctx.config
     const [ name, email ] = await Promise.all([ 'user.name', 'user.email' ].map(k => gitConfigGet(k)))
     
-    await editJsonFile('./package.json', (pkg) => {
+    const isYarn = pkgManager === PkgManager.YARN
+    const isNpm = pkgManager === PkgManager.NPM
+    const isPnpm = pkgManager === PkgManager.PNPM
+    
+    await editJsonFile('./package.json', async (pkg) => {
       pkg.name = packageName
       pkg.description = description
       pkg.author.name = name
@@ -107,16 +117,17 @@ export class BasePlugin implements TemplatePlugin {
       if (repo) {
         pkg.repository = {
           type: 'git',
-          url: `https://github.com/${ repo }.git`,
+          url: `git+https://github.com/${ repo }.git`,
         }
         pkg.bugs = { url: `https://github.com/${ repo }/issues` }
         pkg.homepage = `https://github.com/${ repo }#readme`
       }
+      
+      const pkgV = await checkVersion(pkgManager)
+      pkg.packageManager = `${ pkgManager }@${ pkgV }`
     })
     
     await editFile('./README.md', content => {
-      const isYarn = pkgManager === PkgManager.YARN
-      const isNpm = pkgManager === PkgManager.NPM
       return content
         .replace(/\$PACKAGE_NAME/g, packageName)
         .replace(/\$ENCODE_PACKAGE_NAME/g, encodeURIComponent(packageName))
