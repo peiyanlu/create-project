@@ -1,10 +1,9 @@
 import { confirm, select, text } from '@clack/prompts'
-import { ConfirmResult, emptyDir, PkgManager } from '@peiyanlu/cli-utils'
-import { spawnSync } from 'node:child_process'
+import { ConfirmResult, emptyDir, PkgManager, runNodeSync } from '@peiyanlu/cli-utils'
 import { existsSync } from 'node:fs'
 import { mkdir, rm } from 'node:fs/promises'
 import { resolve } from 'path'
-import { afterAll, afterEach, beforeEach, describe, expect, it, test, vi } from 'vitest'
+import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { Action, createDefaultConfig, Tpl } from '../src/action.js'
 import { Context } from '../src/context.js'
 
@@ -14,7 +13,11 @@ vi.mock('@clack/prompts')
 const mockedText = vi.mocked(text)
 const mockedSelect = vi.mocked(select)
 const mockedConfirm = vi.mocked(confirm)
-
+const exit = vi
+  .spyOn(process, 'exit')
+  .mockImplementation((code?: string | number | null) => {
+    throw Object.assign(new Error('process.exit'), { code })
+  })
 
 const projectName = 'project-starter'
 const description = 'A new project description.'
@@ -61,7 +64,7 @@ describe('create: lib (default package name)', () => {
     // mockedSelect.mockResolvedValueOnce(ConfirmResult.YES)
     
     // // 3. Get package name
-    // mockedText.mockResolvedValueOnce(projectName)
+    mockedText.mockResolvedValueOnce(projectName)
     
     // 4. Get project description
     mockedText.mockResolvedValueOnce(description)
@@ -183,7 +186,7 @@ describe('create: lib (with CLI args)', () => {
     // mockedSelect.mockResolvedValueOnce(ConfirmResult.YES)
     
     // // 3. Get package name
-    // mockedText.mockResolvedValueOnce(projectName)
+    mockedText.mockResolvedValueOnce(projectName)
     
     // 4. Get project description
     mockedText.mockResolvedValueOnce(description)
@@ -247,8 +250,8 @@ describe('create: exit on non-empty dir', () => {
     const action = new Action()
     // provide cmdArgs and options, emulate command-line arguments
     const res = action.handlePrompts(undefined, { overwrite: false }, ctx)
-    // await expect(res).rejects.toMatchObject({ code: 0 })
-    await expect(res).rejects.toThrow('process.exit(0)')
+    await expect(res).rejects.toThrow('process.exit')
+    await expect(res).rejects.toMatchObject({ code: 0 })
     
     expect(text).toHaveBeenCalled()
     expect(select).toHaveBeenCalled()
@@ -271,7 +274,7 @@ describe('create: monorepo', () => {
     mockedSelect.mockResolvedValueOnce(ConfirmResult.YES)
     
     // // 3. Get package name
-    // mockedText.mockResolvedValueOnce(projectName)
+    mockedText.mockResolvedValueOnce(projectName)
     
     // 4. Get project description
     mockedText.mockResolvedValueOnce(description)
@@ -328,7 +331,7 @@ describe('create: cli', () => {
     mockedSelect.mockResolvedValueOnce(ConfirmResult.YES)
     
     // // 3. Get package name
-    // mockedText.mockResolvedValueOnce(projectName)
+    mockedText.mockResolvedValueOnce(projectName)
     
     // 4. Get project description
     mockedText.mockResolvedValueOnce('A cli project description.')
@@ -388,7 +391,7 @@ describe('create: electron', () => {
     mockedSelect.mockResolvedValueOnce(ConfirmResult.YES)
     
     // // 3. Get package name
-    // mockedText.mockResolvedValueOnce(projectName)
+    mockedText.mockResolvedValueOnce(projectName)
     
     // 4. Get project description
     mockedText.mockResolvedValueOnce(description)
@@ -445,7 +448,7 @@ describe('create: react', () => {
     mockedSelect.mockResolvedValueOnce(ConfirmResult.YES)
     
     // // 3. Get package name
-    // mockedText.mockResolvedValueOnce(projectName)
+    mockedText.mockResolvedValueOnce(projectName)
     
     // 4. Get project description
     mockedText.mockResolvedValueOnce(description)
@@ -480,12 +483,7 @@ describe('create: react', () => {
   })
 })
 
-
-const run = (args: string[]) => {
-  return spawnSync('node', [ CWD, ...args ], { encoding: 'utf-8' })
-}
-
-test('prompts for the project name if none supplied', () => {
-  const { stdout } = run([])
-  expect(stdout).toContain('Project name:')
+it('prompts for the project name if none supplied', () => {
+  const res = runNodeSync([ CWD ])
+  expect(res).toContain('Project name:')
 })

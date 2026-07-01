@@ -16,10 +16,13 @@ export default defineConfig({
             label: 'scenario',
             color: 'green',
           },
-          setupFiles: [ './tests/setup.ts' ],
+          setupFiles: [],
           include: [ '**/tests/**/*.{test,spec}.{ts,mts}' ],
         },
       },
     ],
+    env: {
+      // FORCE_COLOR: '0'
+    },
   },
 })
