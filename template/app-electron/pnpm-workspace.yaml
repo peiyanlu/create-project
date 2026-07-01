@@ -7,3 +7,6 @@ allowBuilds:
 nodeLinker: hoisted
 
 blockExoticSubdeps: false
+
+minimumReleaseAgeExclude:
+  - "@peiyanlu/*"

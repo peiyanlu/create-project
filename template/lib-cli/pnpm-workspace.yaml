@@ -1,1 +1,4 @@
 dlxCacheMaxAge: 60
+
+minimumReleaseAgeExclude:
+  - "@peiyanlu/*"
