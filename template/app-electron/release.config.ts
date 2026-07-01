@@ -1,5 +1,3 @@
 import { defineConfig } from '@peiyanlu/release'
 
-export default defineConfig({
-  ignoreNpm: true,
-})
+export default defineConfig({})

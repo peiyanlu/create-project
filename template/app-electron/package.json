@@ -10,7 +10,7 @@
     "build": "electron-forge make",
     "dev:chcp:win": "chcp 65001 && electron-forge start",
     "build:debug:win": "set DEBUG=electron-packager && electron-forge make",
-    "release": "release"
+    "release": "release --skip-npm"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.11.1",

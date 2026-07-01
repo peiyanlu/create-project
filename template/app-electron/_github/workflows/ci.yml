@@ -2,8 +2,6 @@ name: No-Op CI
 
 on:
   pull_request:
-    branches:
-      - "**"
 
 jobs:
   noop:
@@ -22,12 +20,12 @@ jobs:
           fetch-tags: true
           ref: ${{ github.ref }}
       
-      - name: Install pnpm
+      - name: Setup pnpm
         uses: pnpm/action-setup@v6
         with:
           version: 11
       
-      - name: Install Node
+      - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
           node-version: 24.15.0
