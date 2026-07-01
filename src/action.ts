@@ -228,7 +228,7 @@ export class Action {
       ? prjName
       : await text({
         message: MESSAGES.PROJECT_NAME_QUESTION,
-        placeholder: 'Anonymous',
+        placeholder: 'Anonymous - Use "." for the current directory',
         defaultValue: 'untitled',
       }) as string
     assertPrompt(projectName)
@@ -241,18 +241,17 @@ export class Action {
     
     // 3. Get package name
     const pkgName = basename(resolve(ctx.config.targetDir))
-    ctx.config.packageName = isValidPackageName(pkgName)
-      ? pkgName
-      : await text({
-        message: MESSAGES.PACKAGE_NAME_QUESTION,
-        initialValue: toValidPackageName(pkgName),
-        placeholder: toValidPackageName(pkgName),
-        validate(val) {
-          if (!val || !isValidPackageName(val)) {
-            return 'Invalid'
-          }
-        },
-      }) as string
+    const defPkgName = isValidPackageName(pkgName) ? pkgName : toValidPackageName(pkgName)
+    ctx.config.packageName = await text({
+      message: MESSAGES.PACKAGE_NAME_QUESTION,
+      initialValue: defPkgName,
+      placeholder: defPkgName,
+      validate(val) {
+        if (!val || !isValidPackageName(val)) {
+          return 'Invalid'
+        }
+      },
+    }) as string
     assertPrompt(ctx.config.packageName)
     
     

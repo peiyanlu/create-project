@@ -35,7 +35,14 @@ export class BasePlugin implements TemplatePlugin {
     }) as boolean
     assertPrompt(ctx.config.useCI)
     
-    const defRepo = `__OWNER__/${ packageName }`
+    const isScopedPackage = (name: string) =>
+      /^@[a-z0-9-]+\/[a-z0-9._-]+$/.test(name)
+    
+    const name = isScopedPackage(packageName)
+      ? packageName.split('/')[1]
+      : packageName
+    
+    const defRepo = `__OWNER__/${ name }`
     ctx.config.repo = await text({
       message: MESSAGES.PROJECT_REPO_QUESTION,
       initialValue: defRepo,
