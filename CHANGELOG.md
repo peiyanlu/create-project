@@ -1,3 +1,17 @@
+## <small>[0.0.6](https://github.com/peiyanlu/create-project/compare/v0.0.5...v0.0.6) (2026-07-03)</small>
+
+### ✨ 新功能
+
+* 改进项目名称和包名处理逻辑 ([0a4fac7](https://github.com/peiyanlu/create-project/commit/0a4fac773d87890e6e9e1d19f81f39f28ba78776))
+
+### 📝 文档
+
+* 更新 README 模板 ([c494f68](https://github.com/peiyanlu/create-project/commit/c494f68455604ff8d13d0b11a3a3443ea80fbb62))
+
+### 📦 依赖更新
+
+* 模板依赖更新 ([f687616](https://github.com/peiyanlu/create-project/commit/f68761680b12a05b369c0a5c86460e5348f494bb))
+
 ## <small>[0.0.5](https://github.com/peiyanlu/create-project/compare/v0.0.4...v0.0.5) (2026-07-01)</small>
 
 ### ✨ 新功能
