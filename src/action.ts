@@ -249,14 +249,14 @@ export class Action {
             hint: 'Command-line tool for scaffolding and automation',
           },
           {
-            label: 'Monorepo',
-            value: Tpl.Monorepo,
-            hint: 'Multi-package repository using pnpm workspace',
-          },
-          {
             label: 'Plugin',
             value: Tpl.Plugin,
             hint: 'Plugin for Anonymous',
+          },
+          {
+            label: 'Monorepo',
+            value: Tpl.Monorepo,
+            hint: 'Multi-package repository using pnpm workspace',
           },
           {
             label: 'Electron',

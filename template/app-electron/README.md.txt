@@ -1,21 +1,21 @@
-# $PACKAGE_NAME
+# {{ PACKAGE_NAME }}
 
 
-$DESCRIPTION
+{{ DESCRIPTION }}
 
 
 ## Project setup
 
 ```bash
-$ $INSTALL
+$ {{ INSTALL }}
 ```
 
 ## Compile and run the project
 
 ```bash
 # development
-$ $RUN dev
+$ {{ RUN }} dev
 
 # production
-$ $RUN build
+$ {{ RUN }} build
 ```

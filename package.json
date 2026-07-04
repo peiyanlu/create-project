@@ -19,10 +19,11 @@
     "@clack/prompts": "^1.6.0",
     "@peiyanlu/cli-utils": "^0.0.13",
     "ansis": "^4.3.1",
-    "commander": "^15.0.0"
+    "commander": "^15.0.0",
+    "handlebars": "^4.7.9"
   },
   "devDependencies": {
-    "@peiyanlu/release": "^1.1.0",
+    "@peiyanlu/release": "^1.1.1",
     "@types/node": "^24.13.2",
     "tsdown": "^0.22.3",
     "typescript": "^6.0.3",

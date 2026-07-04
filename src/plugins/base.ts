@@ -10,7 +10,19 @@ import {
   PkgManager,
 } from '@peiyanlu/cli-utils'
 import { assertPrompt, RealContext, Tpl } from '../action.js'
+import { render } from '../handlebars.js'
 import { MESSAGES } from '../messages.js'
+
+
+export const collapseBlankLines = (str: string, opts: { threshold?: number; preserve?: number } = {}): string => {
+  const { threshold = 3, preserve = 3 } = opts
+  const eol = str.includes('\r\n') ? '\r\n' : '\n'
+  
+  return str.replace(
+    new RegExp(`(?:\\r?\\n){${ threshold },}`, 'g'),
+    eol.repeat(preserve),
+  )
+}
 
 
 export interface TemplatePlugin {
@@ -80,6 +92,7 @@ export class BasePlugin implements TemplatePlugin {
       rename: {
         _gitignore: '.gitignore',
         _npmrc: '.npmrc',
+        'README.md.txt': 'README.md',
         // CI
         _github: '.github',
       },
@@ -128,17 +141,15 @@ export class BasePlugin implements TemplatePlugin {
     })
     
     await editFile('./README.md', content => {
-      return content
-        .replace(/\$PACKAGE_NAME/g, packageName)
-        .replace(/\$ENCODE_PACKAGE_NAME/g, encodeURIComponent(packageName))
-        .replace(/\$DESCRIPTION/g, description)
-        .replace(/\$INSTALL/g, isYarn ? PkgManager.YARN : `${ pkgManager } install`)
-        .replace(/\$RUN/g, isYarn ? PkgManager.YARN : `${ pkgManager } run`)
-        .replace(/\$ADD/g, `${ pkgManager } ${ isNpm ? 'install' : 'add' }`)
-        .replace(/\$REPO/g, repo)
-        .replace(/\$START([\s\S]*?)\$END/g, (_, $1) => useVitest ? $1 : '')
-        .replace(/\$BADGE_START([\s\S]*?)\$BADGE_END/g, (_, $1) => (useCI && useVitest) ? $1 : '')
-        .replace(/(\r?\n){3,}/g, '\r\n'.repeat(2))
+      return collapseBlankLines(render(content, {
+        PACKAGE_NAME: packageName,
+        DESCRIPTION: description,
+        INSTALL: isYarn ? PkgManager.YARN : `${ pkgManager } install`,
+        RUN: isYarn ? PkgManager.YARN : `${ pkgManager } run`,
+        ADD: `${ pkgManager } ${ isNpm ? 'install' : 'add' }`,
+        REPO: repo,
+        useCITest: useCI && useVitest,
+      }))
     })
     
     await editFile('./LICENSE', content => {
