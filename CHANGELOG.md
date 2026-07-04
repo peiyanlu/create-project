@@ -1,3 +1,9 @@
+## <small>[0.0.7](https://github.com/peiyanlu/create-project/compare/v0.0.6...v0.0.7) (2026-07-04)</small>
+
+### ♻️ 代码重构
+
+* 替换模板渲染方式 ([ff49405](https://github.com/peiyanlu/create-project/commit/ff49405eba0d1b248a3cb49fc64350d7b8be3ab2))
+
 ## <small>[0.0.6](https://github.com/peiyanlu/create-project/compare/v0.0.5...v0.0.6) (2026-07-03)</small>
 
 ### ✨ 新功能
