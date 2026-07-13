@@ -1,6 +1,12 @@
 import { defineConfig, type UserConfig } from 'tsdown'
 
 
+const nodeConfig = {
+  platform: 'node',
+  nodeProtocol: true,
+  shims: true,
+} satisfies UserConfig
+
 const config: UserConfig[] = defineConfig([
   {
     entry: 'src/index.ts',
@@ -8,6 +14,7 @@ const config: UserConfig[] = defineConfig([
     outDir: 'dist',
     platform: 'neutral',
     dts: true,
+    publint: true,
   },
 ] satisfies UserConfig[])
 

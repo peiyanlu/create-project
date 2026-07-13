@@ -232,6 +232,9 @@ importers:
       '@types/node':
         specifier: ^24.13.2
         version: 24.13.2
+      publint:
+        specifier: ^0.3.21
+        version: 0.3.21
       tsdown:
         specifier: ^0.22.3
         version: 0.22.3(publint@0.3.21)(typescript@6.0.3)

@@ -26,6 +26,7 @@
     "@peiyanlu/release": "^1.1.1",
     "@peiyanlu/test-tools": "^0.0.2",
     "@types/node": "^24.13.2",
+    "publint": "^0.3.21",
     "tsdown": "^0.22.3",
     "typescript": "^6.0.3",
     "vitest": "^4.1.9"
