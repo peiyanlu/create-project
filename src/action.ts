@@ -10,6 +10,7 @@ import {
   isGitRepo,
   isValidPackageName,
   PkgManager,
+  stringifyArgs,
   toValidPackageName,
   toValidProjectName,
 } from '@peiyanlu/cli-utils'
@@ -20,8 +21,9 @@ import { scheduler } from 'node:timers/promises'
 import { Context } from './context.js'
 import { MESSAGES } from './messages.js'
 import { ElectronAppPlugin, ReactAppPlugin } from './plugins/app.js'
-import { TemplatePlugin } from './plugins/base.js'
+import type { TemplatePlugin } from './plugins/base.js'
 import { LibCliPlugin, LibMonorepoPlugin, LibPlugin, LibPluginPlugin } from './plugins/lib.js'
+import { getInstallCommand, getRunCommand } from './utils.js'
 
 
 export interface PromptsResult {
@@ -30,9 +32,17 @@ export interface PromptsResult {
   description: string;
   pkgManager: PkgManager;
   template: Tpl;
-  useCI: boolean;
+  automation: string[];
   useVitest: boolean;
   repo: string;
+  cwd: string;
+  tplDir: string;
+  tplBaseDir: string;
+  tplAppDir: string;
+  tplLibDir: string;
+  source: string;
+  target: string;
+  plugin: TemplatePlugin;
 }
 
 export type RealContext = Context<PromptsResult>
@@ -54,16 +64,27 @@ export const assertPrompt = (value: unknown) => {
   }
 }
 
-export const createDefaultConfig = (): PromptsResult => ({
-  targetDir: '',
-  packageName: '',
-  description: '',
-  pkgManager: PkgManager.NPM,
-  template: Tpl.Lib,
-  useCI: false,
-  useVitest: false,
-  repo: '',
-})
+export const createDefaultConfig = (cwd = process.cwd()): PromptsResult => {
+  const tplDir = resolve(__dirname, '..', 'template')
+  return {
+    targetDir: '',
+    packageName: '',
+    description: '',
+    pkgManager: PkgManager.NPM,
+    template: Tpl.Lib,
+    automation: [],
+    useVitest: false,
+    repo: '',
+    cwd,
+    tplDir,
+    tplBaseDir: resolve(tplDir, 'common', 'base'),
+    tplAppDir: resolve(tplDir, 'common', 'app'),
+    tplLibDir: resolve(tplDir, 'common', 'lib'),
+    source: '',
+    target: '',
+    plugin: {} as TemplatePlugin,
+  }
+}
 
 const handleDirConflict = async (targetDir: string, options: CliOptions): Promise<void> => {
   const isExists = existsSync(targetDir)
@@ -103,7 +124,7 @@ const handleDirConflict = async (targetDir: string, options: CliOptions): Promis
   }
 }
 
-const pluginRegistry: Record<Tpl, () => TemplatePlugin> = {
+export const pluginRegistry: Record<Tpl, () => TemplatePlugin> = {
   [Tpl.Lib]: () => new LibPlugin(),
   [Tpl.Cli]: () => new LibCliPlugin(),
   [Tpl.Plugin]: () => new LibPluginPlugin(),
@@ -118,19 +139,22 @@ export class Action {
     intro(cyan('create-project'))
     
     const ctx = new Context(createDefaultConfig())
-    const config = await this.handlePrompts(cmdArgs, options, ctx)
-    const { targetDir, pkgManager, template } = config
+    await this.handlePrompts(cmdArgs, options, ctx)
     
     if (options.dryRun) {
       outro(MESSAGES.DRY_RUN_MODE)
       process.exit(0)
     }
     
-    const cwd: string = process.cwd()
-    const source = resolve(__dirname, '..', 'template', template)
-    const target = resolve(cwd, targetDir)
+    await this.createTask(ctx)
     
-    const plugin = pluginRegistry[template]()
+    await this.handleDoneMessage(ctx)
+    
+    process.exit(0)
+  }
+  
+  public async createTask(ctx: RealContext): Promise<void> {
+    const { plugin, source, target, tplBaseDir } = ctx.config
     
     await tasks([
       {
@@ -138,11 +162,14 @@ export class Action {
         task: async () => {
           await plugin.beforeCopy(ctx)
           
+          await copyDirAsync(tplBaseDir, target, plugin.getCopyOptions(ctx))
+          await scheduler.yield()
+          
           await copyDirAsync(source, target, plugin.getCopyOptions(ctx))
           await scheduler.yield()
           
           // -----------------------------------------------------
-          process.chdir(targetDir)
+          process.chdir(target)
           await scheduler.yield()
           
           // -----------------------------------------------------
@@ -154,10 +181,16 @@ export class Action {
           const isRepo = await isGitRepo()
           if (!isRepo) await execAsync('git init -b master')
           
+          process.chdir(ctx.config.cwd)
+          
           return MESSAGES.PROJECT_INFORMATION_END
         },
       },
     ])
+  }
+  
+  public async handleDoneMessage(ctx: RealContext): Promise<void> {
+    const { cwd, target, pkgManager, plugin } = ctx.config
     
     let doneMessage = '🎉  Done. Now run:\n'
     const cdProjectName = relative(cwd, target)
@@ -166,22 +199,12 @@ export class Action {
       const dir = cdProjectName.includes(' ') ? `"${ cdProjectName }"` : cdProjectName
       doneMessage += `${ prefix } ${ cyan('cd') } ${ dir }\n`
     }
-    switch (pkgManager) {
-      case PkgManager.YARN:
-        doneMessage += `${ prefix } yarn`
-        doneMessage += `${ prefix } yarn dev`
-        break
-      default:
-        doneMessage += `${ prefix } ${ pkgManager } install`
-        doneMessage += `${ prefix } ${ pkgManager } run dev`
-        break
-    }
     
+    doneMessage += `${ prefix } ${ stringifyArgs(getInstallCommand(pkgManager)) }`
+    doneMessage += `${ prefix } ${ stringifyArgs(getRunCommand(pkgManager, 'dev')) }`
     doneMessage += plugin.getDoneMessage(prefix)
     
     outro(doneMessage)
-    
-    process.exit(0)
   }
   
   public async handlePrompts(
@@ -200,6 +223,7 @@ export class Action {
       }) as string
     assertPrompt(projectName)
     ctx.config.targetDir = toValidProjectName(projectName)
+    ctx.config.target = resolve(ctx.config.cwd, ctx.config.targetDir)
     
     
     // 2. Handle directory if exist and not empty
@@ -271,10 +295,11 @@ export class Action {
         ],
       }) as Tpl
     assertPrompt(ctx.config.template)
+    ctx.config.source = resolve(ctx.config.tplDir, ctx.config.template)
     
     
-    const plugin = pluginRegistry[ctx.config.template]()
-    const requiresPnpm = plugin.requiresPnpm() ?? false
+    ctx.config.plugin = pluginRegistry[ctx.config.template]()
+    const requiresPnpm = ctx.config.plugin.requiresPnpm() ?? false
     
     
     // 6. Choose a package manager
@@ -294,7 +319,7 @@ export class Action {
     assertPrompt(ctx.config.pkgManager)
     
     
-    await plugin.extendPrompts(ctx)
+    await ctx.config.plugin.extendPrompts(ctx)
     
     return ctx.config
   }

@@ -9,8 +9,7 @@
     "dev": "electron-forge start",
     "build": "electron-forge make",
     "dev:chcp:win": "chcp 65001 && electron-forge start",
-    "build:debug:win": "set DEBUG=electron-packager && electron-forge make",
-    "release": "release --skip-npm"
+    "build:debug:win": "set DEBUG=electron-packager && electron-forge make"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.11.2",
@@ -34,8 +33,9 @@
   },
   "dependencies": {
     "@peiyanlu/electron": "^1.0.12",
-    "@peiyanlu/release": "^1.0.0",
-    "@peiyanlu/ts-utils": "^0.0.8"
+    "@peiyanlu/ts-utils": "^0.0.8",
+    "svgo": "^4.0.1",
+    "tinyglobby": "^0.2.16"
   },
   "author": {
     "name": "",

@@ -13,7 +13,7 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
   
-  --scrollbar-width: 8px;
+  --scrollbar-width: 6px;
 }
 
 * {
@@ -35,7 +35,7 @@
   
   &::-webkit-scrollbar-thumb {
     border-radius: var(--scrollbar-width);
-    background-color: rgba(var(--primary-color), .35);
+    background-color: rgba(var(--primary-color), .3);
   }
   
   &::-webkit-scrollbar-corner {

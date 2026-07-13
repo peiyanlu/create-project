@@ -14,11 +14,9 @@
     "clean:all": "pnpm run -r --stream clean:dist clean:nm && npx rimraf node_modules && pnpm store prune"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.29.3",
     "@types/node": "^24.13.2",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.9",
-    "@vitest/coverage-v8": "^4.1.9"
+    "tsdown": "^0.22.3"
   },
   "author": {
     "name": "",

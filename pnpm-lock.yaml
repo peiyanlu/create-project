@@ -226,6 +226,9 @@ importers:
       '@peiyanlu/release':
         specifier: ^1.1.1
         version: 1.1.1(conventional-commits-filter@6.0.0)
+      '@peiyanlu/test-tools':
+        specifier: ^0.0.2
+        version: 0.0.2
       '@types/node':
         specifier: ^24.13.2
         version: 24.13.2
@@ -399,6 +402,10 @@ packages:
     resolution: {integrity: sha512-7HRvw9zRq9ompiUgX69fgYM3RLN7bjN9sFlrw9fj9aSIY1pMP+5nzIqdSV0B8+vBzcOWVJ6q39hUzkmG8Td/jA==}
     engines: {node: '>=20'}
     hasBin: true
+
+  '@peiyanlu/test-tools@0.0.2':
+    resolution: {integrity: sha512-6ImrV65NjsNm1Wof3Jnqe+jTwQMHnC7+jMxVj2XaLefOcS3Mnxluaj/lLRE0PvU7ZfPjYi1O4XhJHK8J12ZFZg==}
+    engines: {node: '>=22', pnpm: '>=11'}
 
   '@peiyanlu/ts-utils@0.0.7':
     resolution: {integrity: sha512-+Mk3+otwr2Dl2Ux1HdtJcU8KeE7sbztU/dYUtdhbKzE1jfyHWQkx5mKTu0cj1geh5DnTYSMjFaXW17520HNh5w==}
@@ -1359,6 +1366,8 @@ snapshots:
       tinyglobby: 0.2.17
     transitivePeerDependencies:
       - conventional-commits-filter
+
+  '@peiyanlu/test-tools@0.0.2': {}
 
   '@peiyanlu/ts-utils@0.0.7': {}
 

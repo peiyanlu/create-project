@@ -1,7 +1,8 @@
-import { resolve } from 'path'
+import { join, resolve } from 'path'
 import { defineConfig } from 'vite'
 import { createHtmlPlugin } from 'vite-plugin-html'
 import pkg from './package.json' with { type: 'json' }
+import { createSvgIconsPlugin } from './vite.plugin.icon.mjs'
 
 
 // https://vitejs.dev/config
@@ -19,6 +20,11 @@ export default defineConfig({
     license: true,
   },
   plugins: [
+    createSvgIconsPlugin({
+      iconDirs: [ join(process.cwd(), 'svg-icons') ],
+      symbolId: 'symbol-[dir]-[name]',
+      domId: 'svg-icons-dom',
+    }),
     createHtmlPlugin({
       inject: {
         data: {

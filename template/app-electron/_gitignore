@@ -1,8 +1,0 @@
-.idea/
-node_modules/
-
-# Vite
-.vite/
-
-# Electron-Forge
-out/

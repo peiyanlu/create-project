@@ -6,9 +6,7 @@ const config: UserConfig[] = defineConfig([
     entry: 'src/index.ts',
     format: [ 'esm' ],
     outDir: 'dist',
-    platform: 'node',
-    nodeProtocol: true,
-    shims: true,
+    platform: 'neutral',
     dts: true,
   },
 ] satisfies UserConfig[])

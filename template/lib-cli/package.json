@@ -18,7 +18,7 @@
   "scripts": {
     "dev": "tsdown -w",
     "build": "tsdown",
-    "prepublish": "tsdown"
+    "prepublishOnly": "tsdown"
   },
   "dependencies": {
     "@clack/prompts": "^1.4.0",
@@ -27,11 +27,8 @@
     "@peiyanlu/cli-utils": "^0.0.12"
   },
   "devDependencies": {
-    "@peiyanlu/release": "^1.0.0",
     "@types/node": "^24.13.2",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.9",
-    "@vitest/coverage-v8": "^4.1.9",
     "tsdown": "^0.22.3"
   },
   "author": {

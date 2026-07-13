@@ -8,7 +8,7 @@ export const MESSAGES = {
   PACKAGE_MANAGER_QUESTION: 'Select package manager:',
   PROJECT_TEMPLATE_QUESTION: 'Select project template:',
   PACKAGE_DESCRIPTION_QUESTION: 'Project description:',
-  PROJECT_CI_QUESTION: `Include ${ yellow`CI/automation` } config:`,
+  PROJECT_AUTOMATION_QUESTION: `Select ${ yellow`automation` } features:`,
   
   DIRECTORY_CONFLICT_QUESTION: (dir: string) =>
     `${ dir === '.' ? 'Current' : 'Target' } directory "${ green(dir) }" is not empty:`,

@@ -1,10 +1,11 @@
-import { confirm, select, text } from '@clack/prompts'
+import { confirm, multiselect, select, text } from '@clack/prompts'
 import { ConfirmResult, emptyDir, PkgManager, runNodeSync } from '@peiyanlu/cli-utils'
+import { TEST_TMP_ROOT } from '@peiyanlu/test-tools'
 import { existsSync } from 'node:fs'
 import { mkdir, rm } from 'node:fs/promises'
 import { resolve } from 'path'
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { Action, createDefaultConfig, Tpl } from '../src/action.js'
+import { Action, createDefaultConfig, pluginRegistry, type RealContext, Tpl } from '../src/action.js'
 import { Context } from '../src/context.js'
 
 
@@ -13,19 +14,23 @@ vi.mock('@clack/prompts')
 const mockedText = vi.mocked(text)
 const mockedSelect = vi.mocked(select)
 const mockedConfirm = vi.mocked(confirm)
+const mockedMultiselect = vi.mocked(multiselect)
+
 const exit = vi
   .spyOn(process, 'exit')
   .mockImplementation((code?: string | number | null) => {
     throw Object.assign(new Error('process.exit'), { code })
   })
 
+
 const projectName = 'project-starter'
 const description = 'A new project description.'
 const repo = `__OWNER__/${ projectName }`
 
 const CWD = process.cwd()
-const TMP_CWD = resolve(__dirname, '.tmp')
+const TMP_CWD = TEST_TMP_ROOT
 const TMP_DIR = resolve(TMP_CWD, projectName)
+
 
 const makeDirty = () => mkdir(resolve(TMP_DIR, 'subfolder'), { recursive: true })
 
@@ -41,19 +46,13 @@ afterEach(async () => {
   }
 })
 
-afterAll(async () => {
-  if (existsSync(TMP_CWD)) {
-    process.chdir(CWD)
-    await rm(TMP_CWD, { recursive: true })
-  }
-})
-
 
 describe('create: lib (default package name)', () => {
-  const ctx = new Context(createDefaultConfig())
+  let ctx: RealContext
   
   beforeEach(async () => {
     vi.clearAllMocks()
+    ctx = new Context(createDefaultConfig())
     
     await emptyDir(TMP_DIR, [])
     
@@ -77,8 +76,8 @@ describe('create: lib (default package name)', () => {
     
     // --------------------------------------------
     
-    // useCI
-    mockedConfirm.mockResolvedValueOnce(true)
+    // automation
+    mockedMultiselect.mockResolvedValueOnce([])
     
     // repo
     mockedText.mockResolvedValueOnce(repo)
@@ -101,9 +100,17 @@ describe('create: lib (default package name)', () => {
       description: description,
       pkgManager: PkgManager.PNPM,
       template: Tpl.Lib,
-      useCI: true,
+      automation: [],
       repo: repo,
       useVitest: true,
+      cwd: TMP_CWD,
+      plugin: pluginRegistry[Tpl.Lib](),
+      source: resolve(CWD, 'template', Tpl.Lib),
+      target: resolve(TMP_CWD, projectName),
+      tplAppDir: resolve(CWD, 'template', 'common', 'app'),
+      tplBaseDir: resolve(CWD, 'template', 'common', 'base'),
+      tplDir: resolve(CWD, 'template'),
+      tplLibDir: resolve(CWD, 'template', 'common', 'lib'),
     })
   })
 })
@@ -112,10 +119,11 @@ describe('create: lib (default package name)', () => {
 describe('create: lib (custom package name)', () => {
   const projectName = 'project starter'
   const packageName = projectName.replace(/\s+/, '')
-  const ctx = new Context(createDefaultConfig())
+  let ctx: RealContext
   
   beforeEach(async () => {
     vi.clearAllMocks()
+    ctx = new Context(createDefaultConfig())
     
     await emptyDir(TMP_DIR, [])
     
@@ -139,8 +147,8 @@ describe('create: lib (custom package name)', () => {
     
     // --------------------------------------------
     
-    // useCI
-    mockedConfirm.mockResolvedValueOnce(true)
+    // automation
+    mockedMultiselect.mockResolvedValueOnce([])
     
     // repo
     mockedText.mockResolvedValueOnce(`__OWNER__/${ packageName }`)
@@ -163,19 +171,28 @@ describe('create: lib (custom package name)', () => {
       description: description,
       pkgManager: PkgManager.NPM,
       template: Tpl.Lib,
-      useCI: true,
+      automation: [],
       repo: `__OWNER__/${ packageName }`,
       useVitest: false,
+      cwd: TMP_CWD,
+      plugin: pluginRegistry[Tpl.Lib](),
+      source: resolve(CWD, 'template', Tpl.Lib),
+      target: resolve(TMP_CWD, projectName),
+      tplAppDir: resolve(CWD, 'template', 'common', 'app'),
+      tplBaseDir: resolve(CWD, 'template', 'common', 'base'),
+      tplDir: resolve(CWD, 'template'),
+      tplLibDir: resolve(CWD, 'template', 'common', 'lib'),
     })
   })
 })
 
 
 describe('create: lib (with CLI args)', () => {
-  const ctx = new Context(createDefaultConfig())
+  let ctx: RealContext
   
   beforeEach(async () => {
     vi.clearAllMocks()
+    ctx = new Context(createDefaultConfig())
     
     await makeDirty()
     
@@ -199,8 +216,8 @@ describe('create: lib (with CLI args)', () => {
     
     // --------------------------------------------
     
-    // useCI
-    mockedConfirm.mockResolvedValueOnce(true)
+    // automation
+    mockedMultiselect.mockResolvedValueOnce([])
     
     // repo
     mockedText.mockResolvedValueOnce(repo)
@@ -223,9 +240,17 @@ describe('create: lib (with CLI args)', () => {
       description: description,
       pkgManager: PkgManager.PNPM,
       template: Tpl.Lib,
-      useCI: true,
+      automation: [],
       repo: repo,
       useVitest: true,
+      cwd: TMP_CWD,
+      plugin: pluginRegistry[Tpl.Lib](),
+      source: resolve(CWD, 'template', Tpl.Lib),
+      target: resolve(TMP_CWD, projectName),
+      tplAppDir: resolve(CWD, 'template', 'common', 'app'),
+      tplBaseDir: resolve(CWD, 'template', 'common', 'base'),
+      tplDir: resolve(CWD, 'template'),
+      tplLibDir: resolve(CWD, 'template', 'common', 'lib'),
     })
   })
 })
@@ -260,10 +285,11 @@ describe('create: exit on non-empty dir', () => {
 
 
 describe('create: monorepo', () => {
-  const ctx = new Context(createDefaultConfig())
+  let ctx: RealContext
   
   beforeEach(async () => {
     vi.clearAllMocks()
+    ctx = new Context(createDefaultConfig())
     
     await makeDirty()
     
@@ -284,8 +310,8 @@ describe('create: monorepo', () => {
     
     // --------------------------------------------
     
-    // useCI
-    mockedConfirm.mockResolvedValueOnce(true)
+    // automation
+    mockedMultiselect.mockResolvedValueOnce([])
     
     // repo
     mockedText.mockResolvedValueOnce(repo)
@@ -308,19 +334,28 @@ describe('create: monorepo', () => {
       description: description,
       pkgManager: PkgManager.PNPM,
       template: Tpl.Monorepo,
-      useCI: true,
+      automation: [],
       repo: repo,
       useVitest: true,
+      cwd: TMP_CWD,
+      plugin: pluginRegistry[Tpl.Monorepo](),
+      source: resolve(CWD, 'template', Tpl.Monorepo),
+      target: resolve(TMP_CWD, projectName),
+      tplAppDir: resolve(CWD, 'template', 'common', 'app'),
+      tplBaseDir: resolve(CWD, 'template', 'common', 'base'),
+      tplDir: resolve(CWD, 'template'),
+      tplLibDir: resolve(CWD, 'template', 'common', 'lib'),
     })
   })
 })
 
 
 describe('create: cli', () => {
-  const ctx = new Context(createDefaultConfig())
+  let ctx: RealContext
   
   beforeEach(async () => {
     vi.clearAllMocks()
+    ctx = new Context(createDefaultConfig())
     
     await makeDirty()
     
@@ -344,8 +379,8 @@ describe('create: cli', () => {
     
     // --------------------------------------------
     
-    // useCI
-    mockedConfirm.mockResolvedValueOnce(true)
+    // automation
+    mockedMultiselect.mockResolvedValueOnce([])
     
     // repo
     mockedText.mockResolvedValueOnce(repo)
@@ -368,19 +403,28 @@ describe('create: cli', () => {
       description: 'A cli project description.',
       pkgManager: PkgManager.PNPM,
       template: Tpl.Cli,
-      useCI: true,
+      automation: [],
       repo: repo,
       useVitest: true,
+      cwd: TMP_CWD,
+      plugin: pluginRegistry[Tpl.Cli](),
+      source: resolve(CWD, 'template', Tpl.Cli),
+      target: resolve(TMP_CWD, projectName),
+      tplAppDir: resolve(CWD, 'template', 'common', 'app'),
+      tplBaseDir: resolve(CWD, 'template', 'common', 'base'),
+      tplDir: resolve(CWD, 'template'),
+      tplLibDir: resolve(CWD, 'template', 'common', 'lib'),
     })
   })
 })
 
 
 describe('create: electron', () => {
-  const ctx = new Context(createDefaultConfig())
+  let ctx: RealContext
   
   beforeEach(async () => {
     vi.clearAllMocks()
+    ctx = new Context(createDefaultConfig())
     
     await makeDirty()
     
@@ -404,8 +448,8 @@ describe('create: electron', () => {
     
     // --------------------------------------------
     
-    // useCI
-    mockedConfirm.mockResolvedValueOnce(true)
+    // automation
+    mockedMultiselect.mockResolvedValueOnce([])
     
     // repo
     mockedText.mockResolvedValueOnce(repo)
@@ -425,19 +469,28 @@ describe('create: electron', () => {
       description: description,
       pkgManager: PkgManager.PNPM,
       template: Tpl.Electron,
-      useCI: true,
+      automation: [],
       repo: repo,
       useVitest: false,
+      cwd: TMP_CWD,
+      plugin: pluginRegistry[Tpl.Electron](),
+      source: resolve(CWD, 'template', Tpl.Electron),
+      target: resolve(TMP_CWD, projectName),
+      tplAppDir: resolve(CWD, 'template', 'common', 'app'),
+      tplBaseDir: resolve(CWD, 'template', 'common', 'base'),
+      tplDir: resolve(CWD, 'template'),
+      tplLibDir: resolve(CWD, 'template', 'common', 'lib'),
     })
   })
 })
 
 
 describe('create: react', () => {
-  const ctx = new Context(createDefaultConfig())
+  let ctx: RealContext
   
   beforeEach(async () => {
     vi.clearAllMocks()
+    ctx = new Context(createDefaultConfig())
     
     await makeDirty()
     
@@ -476,9 +529,17 @@ describe('create: react', () => {
       description: description,
       pkgManager: PkgManager.PNPM,
       template: Tpl.React,
-      useCI: false,
+      automation: [],
       useVitest: false,
       repo: '',
+      cwd: TMP_CWD,
+      plugin: pluginRegistry[Tpl.React](),
+      source: resolve(CWD, 'template', Tpl.React),
+      target: resolve(TMP_CWD, projectName),
+      tplAppDir: resolve(CWD, 'template', 'common', 'app'),
+      tplBaseDir: resolve(CWD, 'template', 'common', 'base'),
+      tplDir: resolve(CWD, 'template'),
+      tplLibDir: resolve(CWD, 'template', 'common', 'lib'),
     })
   })
 })

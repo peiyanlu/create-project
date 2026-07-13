@@ -1,17 +1,17 @@
-import { confirm, text } from '@clack/prompts'
+import { multiselect, text } from '@clack/prompts'
 import {
   checkVersion,
   type CopyOptions,
   editFile,
   editJsonFile,
   gitConfigGet,
-  isScopedPackageName,
-  isTestFile,
   PkgManager,
+  stringifyArgs,
 } from '@peiyanlu/cli-utils'
-import { assertPrompt, RealContext, Tpl } from '../action.js'
+import { assertPrompt, type RealContext, Tpl } from '../action.js'
 import { render } from '../handlebars.js'
 import { MESSAGES } from '../messages.js'
+import { getInstallCommand, getRunCommand } from '../utils.js'
 
 
 export const collapseBlankLines = (str: string, opts: { threshold?: number; preserve?: number } = {}): string => {
@@ -24,9 +24,24 @@ export const collapseBlankLines = (str: string, opts: { threshold?: number; pres
   )
 }
 
+export const parsePackageName = (validName: string): { scope?: string; name: string; } => {
+  if (validName.startsWith('@')) {
+    const slash = validName.indexOf('/')
+    return {
+      scope: validName.slice(1, slash),
+      name: validName.slice(slash + 1),
+    }
+  }
+  
+  return { name: validName }
+}
+
+export type CopyFilter = (name: string, isDir: boolean) => boolean
 
 export interface TemplatePlugin {
   name: Tpl
+  copyRename: Record<string, string>
+  copyIgnore: CopyFilter[]
   
   requiresPnpm(): boolean
   
@@ -45,22 +60,57 @@ export interface TemplatePlugin {
 
 export class BasePlugin implements TemplatePlugin {
   name = 'base' as Tpl
+  copyRename: Record<string, string> = {}
+  copyIgnore: CopyFilter[] = []
   
   requiresPnpm(): boolean { return false }
   
   async extendPrompts(ctx: RealContext) {
-    const { packageName } = ctx.config
+    const { packageName, template } = ctx.config
     
-    ctx.config.useCI = await confirm({
-      message: MESSAGES.PROJECT_CI_QUESTION,
-    }) as boolean
-    assertPrompt(ctx.config.useCI)
+    const isReact = template === Tpl.React
+    const isMono = template === Tpl.Monorepo
     
-    const name = isScopedPackageName(packageName)
-      ? packageName.split('/')[1]
-      : packageName
+    ctx.config.automation = await multiselect({
+      message: MESSAGES.PROJECT_AUTOMATION_QUESTION,
+      options: [
+        ...(!isReact ? [
+          {
+            label: 'GitHub Actions',
+            value: 'github',
+            hint: 'CI/CD workflows for build, test, and release',
+          },
+          ...(
+            isMono
+              ? [
+                {
+                  label: 'Changesets',
+                  value: 'changesets',
+                  hint: 'Versioning and changelog generation',
+                },
+              ]
+              : [
+                {
+                  label: 'Release',
+                  value: 'release',
+                  hint: 'Automated versioning and publishing',
+                },
+              ]
+          ),
+        ] : []),
+        {
+          label: 'Renovate',
+          value: 'renovate',
+          hint: 'Automatically update dependencies',
+        },
+      ],
+      initialValues: [],
+      required: false,
+    }) as string[]
+    assertPrompt(ctx.config.automation)
     
-    const defRepo = `__OWNER__/${ name }`
+    const { scope = '__OWNER__', name } = parsePackageName(packageName)
+    const defRepo = `${ scope }/${ name }`
     ctx.config.repo = await text({
       message: MESSAGES.PROJECT_REPO_QUESTION,
       initialValue: defRepo,
@@ -76,37 +126,28 @@ export class BasePlugin implements TemplatePlugin {
   }
   
   getCopyOptions(ctx: RealContext): CopyOptions {
-    const { useCI, useVitest, pkgManager } = ctx.config
-    const pnpmFiles: string[] = [
-      'pnpm-workspace.yaml',
-    ]
-    const ciFiles: string[] = [
-      '_github',
-      'release.config.ts',
-      'renovate.json',
-    ]
+    const { pkgManager, automation } = ctx.config
+    const pnpmFiles: string[] = [ 'pnpm-workspace.yaml' ]
+    const renovate = [ 'renovate.json' ]
+    
     const isPnpm = pkgManager === PkgManager.PNPM
-    const testActions = [ 'test.yaml' ]
     
     return {
       rename: {
         _gitignore: '.gitignore',
         _npmrc: '.npmrc',
-        'README.md.txt': 'README.md',
-        // CI
-        _github: '.github',
+        'README.md.hbs': 'README.md',
+        ...this.copyRename,
       },
       
       skips: [
-        // CI
-        (name: string) => !useCI && ciFiles.includes(name),
-        (name: string) => (useCI && !useVitest) && testActions.includes(name),
-        
-        // Vitest
-        (name: string) => !useVitest && isTestFile(name),
+        // automation
+        (name: string) => !automation.includes('renovate') && renovate.includes(name),
         
         // pnpm
         (name: string) => !isPnpm && pnpmFiles.includes(name),
+        
+        ...this.copyIgnore,
       ],
     }
   }
@@ -114,12 +155,10 @@ export class BasePlugin implements TemplatePlugin {
   async beforeCopy(ctx: RealContext) {}
   
   async afterCopy(ctx: RealContext) {
-    const { repo, packageName, description, pkgManager, useVitest, useCI } = ctx.config
+    const { repo, packageName, description, pkgManager, useVitest, automation } = ctx.config
     const [ name, email ] = await Promise.all([ 'user.name', 'user.email' ].map(k => gitConfigGet(k)))
     
-    const isYarn = pkgManager === PkgManager.YARN
-    const isNpm = pkgManager === PkgManager.NPM
-    const isPnpm = pkgManager === PkgManager.PNPM
+    const useGitHub = automation.includes('github')
     
     await editJsonFile('./package.json', async (pkg) => {
       pkg.name = packageName
@@ -144,11 +183,10 @@ export class BasePlugin implements TemplatePlugin {
       return collapseBlankLines(render(content, {
         PACKAGE_NAME: packageName,
         DESCRIPTION: description,
-        INSTALL: isYarn ? PkgManager.YARN : `${ pkgManager } install`,
-        RUN: isYarn ? PkgManager.YARN : `${ pkgManager } run`,
-        ADD: `${ pkgManager } ${ isNpm ? 'install' : 'add' }`,
+        INSTALL: stringifyArgs(getInstallCommand(pkgManager)),
+        RUN: stringifyArgs(getRunCommand(pkgManager, '')),
         REPO: repo,
-        useCITest: useCI && useVitest,
+        useCITest: useGitHub && useVitest,
       }))
     })
     

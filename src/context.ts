@@ -4,7 +4,10 @@ import { scheduler } from 'node:timers/promises'
 
 export class Context<TConfig> {
   private scriptsToSet: Record<string, string> = {}
+  private binToSet: Record<string, string> = {}
   private pendingCommands: string[] = []
+  private depsToAdd: string[][] = []
+  private devDepsToAdd: string[][] = []
   private depsToRemove: string[] = []
   private devDepsToRemove: string[] = []
   
@@ -12,6 +15,18 @@ export class Context<TConfig> {
   
   setScripts(s: Record<string, string>) {
     Object.assign(this.scriptsToSet, s)
+  }
+  
+  setBin(s: Record<string, string>) {
+    Object.assign(this.binToSet, s)
+  }
+  
+  addDeps(list: string[][]) {
+    this.depsToAdd.push(...list)
+  }
+  
+  addDevDeps(list: [ string, string ][]) {
+    this.devDepsToAdd.push(...list)
   }
   
   removeDeps(list: string[]) {
@@ -27,15 +42,24 @@ export class Context<TConfig> {
   }
   
   async applyChanges() {
-    const del = this.depsToRemove.map(k => `dependencies["${ k }"]`)
+    const delDeps = this.depsToRemove.map(k => `dependencies["${ k }"]`)
       .concat(this.devDepsToRemove.map(k => `devDependencies["${ k }"]`))
       .join(' ')
-    const add = Object.entries(this.scriptsToSet)
+    const addDeps = this.depsToAdd.map(([ k, v ]) => `dependencies["${ k }"]="${ v }"`)
+      .concat(this.devDepsToAdd.map(([ k, v ]) => `devDependencies["${ k }"]="${ v }"`))
+      .join(' ')
+    const addScripts = Object.entries(this.scriptsToSet)
       .map(([ k, v ]) => `scripts."${ k }"="${ v }"`)
       .join(' ')
+    const addBin = Object.entries(this.binToSet)
+      .map(([ k, v ]) => `bin."${ k }"="${ v }"`)
+      .join(' ')
     
-    if (del) this.enqueueCommand([ `npm pkg delete ${ del }` ])
-    if (add) this.enqueueCommand([ `npm pkg set ${ add }` ])
+    
+    if (delDeps) this.enqueueCommand([ `npm pkg delete ${ delDeps }` ])
+    if (addDeps) this.enqueueCommand([ `npm pkg set ${ addDeps }` ])
+    if (addScripts) this.enqueueCommand([ `npm pkg set ${ addScripts }` ])
+    if (addBin) this.enqueueCommand([ `npm pkg set ${ addBin }` ])
     
     for (const cmd of this.pendingCommands) {
       await execAsync(cmd)
@@ -43,4 +67,3 @@ export class Context<TConfig> {
     }
   }
 }
-

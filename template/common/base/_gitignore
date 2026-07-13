@@ -12,8 +12,3 @@ logs/
 
 # Project
 node_modules/
-dist/
-coverage/
-
-test-pro/
-.test-tools-tmp/

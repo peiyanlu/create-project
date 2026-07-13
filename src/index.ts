@@ -29,7 +29,7 @@ program
   .action(async (argName: string, options: Record<string, boolean | string>) => {
     await new Action().handle(argName, options)
       .catch(error => {
-        log.error( error.stack)
+        log.error(error.stack)
         throw error
       })
   })

@@ -1,8 +1,10 @@
 import { confirm } from '@clack/prompts'
-import { isScopedPackageName } from '@peiyanlu/cli-utils'
-import { assertPrompt, RealContext, Tpl } from '../action.js'
+import { copyDirAsync, type CopyOptions, editFile, editJsonFile, eol, isTestFile } from '@peiyanlu/cli-utils'
+import { writeFileSync } from 'node:fs'
+import { assertPrompt, type RealContext, Tpl } from '../action.js'
 import { MESSAGES } from '../messages.js'
-import { BasePlugin } from './base.js'
+import { BasePlugin, parsePackageName } from './base.js'
+import { changesetsVersion, releaseVersion, vitestCovVersion, vitestVersion } from './deps.js'
 
 
 export class LibPlugin extends BasePlugin {
@@ -17,38 +19,86 @@ export class LibPlugin extends BasePlugin {
     assertPrompt(ctx.config.useVitest)
   }
   
+  override getCopyOptions(ctx: RealContext): CopyOptions {
+    const { useVitest, automation } = ctx.config
+    const github = [ '_github' ]
+    const testActions = [ 'test.yaml' ]
+    
+    const useGitHub = automation.includes('github')
+    
+    this.copyRename = Object.assign(this.copyRename, {
+      _github: '.github',
+    })
+    this.copyIgnore.push(...[
+      // automation
+      (name: string) => (useGitHub && !useVitest) && testActions.includes(name),
+      (name: string) => !useGitHub && github.includes(name),
+      
+      // Vitest
+      (name: string) => !useVitest && isTestFile(name),
+    ])
+    
+    return super.getCopyOptions(ctx)
+  }
+  
+  override async beforeCopy(ctx: RealContext) {
+    const { target, tplLibDir } = ctx.config
+    
+    await copyDirAsync(tplLibDir, target, this.getCopyOptions(ctx))
+    
+    await super.beforeCopy(ctx)
+  }
+  
   override async afterCopy(ctx: RealContext): Promise<void> {
-    const { useCI, useVitest } = ctx.config
+    const { useVitest } = ctx.config
     
-    if (!useCI) {
-      ctx.removeDevDeps([
-        '@peiyanlu/release',
+    this.applyRelease(ctx)
+    this.applyVitest(ctx)
+    
+    await editFile('./.gitignore', content => {
+      const extra = [ 'dist/' ]
+      if (useVitest) extra.push('coverage/')
+      
+      return [ content, ...extra ].join('\n')
+    })
+    
+    await super.afterCopy(ctx)
+  }
+  
+  applyRelease(ctx: RealContext) {
+    const { automation } = ctx.config
+    const useRelease = automation.includes('release')
+    
+    if (useRelease) {
+      ctx.addDevDeps([
+        [ '@peiyanlu/release', releaseVersion ],
       ])
-    }
-    if (useCI) {
       ctx.setScripts({ 'release': 'release' })
+      
+      const content = [
+        `import { defineConfig } from '@peiyanlu/release'`,
+        `export default defineConfig({})`,
+      ].join(eol(2))
+      writeFileSync('./release.config.ts', content)
     }
+  }
+  
+  applyVitest(ctx: RealContext) {
+    const { useVitest } = ctx.config
     
-    if (!useVitest) {
-      ctx.removeDevDeps([
-        'vitest',
-        '@vitest/coverage-v8',
-      ])
-    }
     if (useVitest) {
+      ctx.addDevDeps([
+        [ 'vitest', vitestVersion ],
+        [ '@vitest/coverage-v8', vitestCovVersion ],
+      ])
       ctx.setScripts({
         'test': 'vitest run',
         'test:cov': 'vitest run --coverage',
       })
     }
-    
-    await super.afterCopy(ctx)
   }
 }
 
-export class LibPluginPlugin extends LibPlugin {
-  name = Tpl.Plugin
-}
 
 export class LibCliPlugin extends LibPlugin {
   name = Tpl.Cli
@@ -56,17 +106,31 @@ export class LibCliPlugin extends LibPlugin {
   override async afterCopy(ctx: RealContext): Promise<void> {
     const { packageName } = ctx.config
     
-    const name = isScopedPackageName(packageName)
-      ? packageName.split('/')[1]
-      : packageName
-    
+    const { name } = parsePackageName(packageName)
     ctx.enqueueCommand([
       `npm pkg set bin."${ name }"="index.js"`,
     ])
+    ctx.setBin({ [name]: 'index.js' })
+    
+    await editJsonFile('./renovate.json', json => {
+      json.customManagers ??= []
+      json.customManagers.push(...[
+        {
+          'customType': 'regex',
+          'managerFilePatterns': [
+            'src/.*\\.ts$',
+          ],
+          'matchStrings': [
+            '//\\s*renovate:\\s+datasource=(?<datasource>\\S+)\\s+depName=(?<depName>\\S+)\\s+(?:export\\s+)?(?:var|let|const)\\s+\\S+\\s*=\\s*["\'](?<currentValue>[^"\']+)["\']',
+          ],
+        },
+      ])
+    })
     
     await super.afterCopy(ctx)
   }
 }
+
 
 export class LibMonorepoPlugin extends LibPlugin {
   name = Tpl.Monorepo
@@ -75,13 +139,20 @@ export class LibMonorepoPlugin extends LibPlugin {
     return true
   }
   
-  override async afterCopy(ctx: RealContext): Promise<void> {
-    const { useCI } = ctx.config
+  override getDoneMessage(prefix: string): string {
+    let msg = '\n'
+    msg += `${ prefix } pnpm cs:init`
+    return msg
+  }
+  
+  applyRelease(ctx: RealContext) {
+    const { automation } = ctx.config
+    const useRelease = automation.includes('changesets')
     
-    if (!useCI) {
-      ctx.removeDevDeps([ '@changesets/cli' ])
-    }
-    if (useCI) {
+    if (useRelease) {
+      ctx.addDevDeps([
+        [ '@changesets/cli', changesetsVersion ],
+      ])
       ctx.setScripts({
         'cs:init': 'changeset init',
         'cs:add': 'changeset add',
@@ -89,13 +160,29 @@ export class LibMonorepoPlugin extends LibPlugin {
         'cs:publish': 'changeset publish',
       })
     }
+  }
+}
+
+
+export class LibPluginPlugin extends LibPlugin {
+  name = Tpl.Plugin
+  
+  override async afterCopy(ctx: RealContext): Promise<void> {
+    await editJsonFile('./renovate.json', json => {
+      json.packageRules ??= []
+      json.packageRules.push(...[
+        {
+          'matchDepTypes': [ 'peerDependencies' ],
+          'rangeStrategy': 'widen',
+        },
+        {
+          'matchDepTypes': [ 'peerDependencies' ],
+          'matchUpdateTypes': [ 'minor', 'patch' ],
+          'enabled': false,
+        },
+      ])
+    })
     
     await super.afterCopy(ctx)
-  }
-  
-  override getDoneMessage(prefix: string): string {
-    let msg = '\n'
-    msg += `${ prefix } pnpm cs:init`
-    return msg
   }
 }
