@@ -1,3 +1,9 @@
+## <small>[0.0.8](https://github.com/peiyanlu/create-project/compare/v0.0.7...v0.0.8) (2026-07-14)</small>
+
+### ♻️ 代码重构
+
+* 优化项目生成逻辑 ([d41975a](https://github.com/peiyanlu/create-project/commit/d41975a24616fa358b2f85cfdc7e7213f8f2743c))
+
 ## <small>[0.0.7](https://github.com/peiyanlu/create-project/compare/v0.0.6...v0.0.7) (2026-07-04)</small>
 
 ### ♻️ 代码重构
