@@ -16,20 +16,20 @@
     "release": "release"
   },
   "dependencies": {
-    "@clack/prompts": "^1.6.0",
+    "@clack/prompts": "^1.7.0",
     "@peiyanlu/cli-utils": "^0.0.13",
     "ansis": "^4.3.1",
     "commander": "^15.0.0",
     "handlebars": "^4.7.9"
   },
   "devDependencies": {
-    "@peiyanlu/release": "^1.1.1",
+    "@peiyanlu/release": "^1.1.2",
     "@peiyanlu/test-tools": "^0.0.2",
     "@types/node": "^24.13.2",
     "publint": "^0.3.21",
-    "tsdown": "^0.22.3",
+    "tsdown": "^0.22.5",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.9"
+    "vitest": "^4.1.10"
   },
   "author": {
     "name": "YanluPei",

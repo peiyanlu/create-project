@@ -18,7 +18,7 @@
     "@types/node": "^24.13.2",
     "publint": "^0.3.21",
     "typescript": "^6.0.3",
-    "tsdown": "^0.22.3"
+    "tsdown": "^0.22.5"
   },
   "author": {
     "name": "",
