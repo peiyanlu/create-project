@@ -21,16 +21,16 @@
     "prepublishOnly": "tsdown"
   },
   "dependencies": {
-    "@clack/prompts": "^1.4.0",
-    "ansis": "^4.2.0",
+    "@clack/prompts": "^1.7.0",
+    "ansis": "^4.3.1",
     "commander": "^15.0.0",
-    "@peiyanlu/cli-utils": "^0.0.12"
+    "@peiyanlu/cli-utils": "^0.0.13"
   },
   "devDependencies": {
     "@types/node": "^24.13.2",
     "publint": "^0.3.21",
     "typescript": "^6.0.3",
-    "tsdown": "^0.22.3"
+    "tsdown": "^0.22.5"
   },
   "author": {
     "name": "",
