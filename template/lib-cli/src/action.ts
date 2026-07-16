@@ -1,6 +1,7 @@
 import { cancel, intro, isCancel, outro, tasks } from '@clack/prompts'
 import { type CliOptions } from '@peiyanlu/cli-utils'
-import { cyan } from 'ansis'
+import { cyan, dim, rgb } from 'ansis'
+import pkg from '../package.json' with { type: 'json' }
 import { MESSAGES } from './messages.js'
 
 
@@ -9,16 +10,18 @@ export interface PromptsResult {
 }
 
 
-const assertPrompt = (value: unknown) => {
+const assertPrompt = (value: unknown): void => {
   if (isCancel(value)) {
-    cancel('Operation cancelled')
+    cancel(MESSAGES.OPERATION_ABORTED)
     process.exit(0)
   }
 }
 
 
 export class Action {
-  public async handle(cmdArgs: string | undefined, options: CliOptions) {
+  public async handle(cmdArgs: string | undefined, options: CliOptions): Promise<void> {
+    console.log(`${ rgb(33, 91, 184)(`i`) } ${ pkg.name } ${ dim(`v${ pkg.version }`) }\n`)
+    
     intro(cyan('xxx-xxxx'))
     
     const config = await this.handlePrompts(cmdArgs, options)

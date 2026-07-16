@@ -13,6 +13,7 @@ const config: UserConfig[] = defineConfig([
     format: [ 'esm' ],
     outDir: 'dist',
     ...nodeConfig,
+    dts: true,
   },
   {
     entry: 'src/index.ts',

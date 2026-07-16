@@ -13,7 +13,9 @@ const config: UserConfig[] = defineConfig([
     format: [ 'esm' ],
     outDir: 'dist',
     platform: 'neutral',
-    dts: true,
+    dts: {
+      sourcemap: true,
+    },
     workspace: true,
     publint: true,
   },

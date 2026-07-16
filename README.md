@@ -1,20 +1,15 @@
 # Create New Project
 
-<p>
-  <a href="https://www.npmjs.com/package/@peiyanlu/create-project" target="_blank">
-    <img src="https://img.shields.io/badge/npm-@peiyanlu/create--project-blue.svg?logo=npm" alt="NPM Package" />
-  </a>
-  <a href="https://www.npmjs.com/package/@peiyanlu/create-project" target="_blank">
-    <img src="https://img.shields.io/npm/v/@peiyanlu/create-project.svg" alt="NPM Version" />
-  </a>
-  <a href="https://www.npmjs.com/package/@peiyanlu/create-project" target="_blank">
-    <img src="https://img.shields.io/npm/l/@peiyanlu/create-project.svg" alt="Package License" />
-  </a>
-  <a href="https://www.npmjs.com/package/@peiyanlu/create-project" target="_blank">
-    <img src="https://img.shields.io/npm/dm/@peiyanlu/create-project.svg" alt="NPM Downloads" />
-  </a>
-</p>
 
+[![module](https://img.shields.io/badge/package-ESM--only-FFE536.svg?logo=npm)](https://nodejs.org/api/esm.html)
+[![npm](https://img.shields.io/npm/v/@peiyanlu/create-project.svg)](https://npmjs.com/package/@peiyanlu/create-project)
+[![license](https://img.shields.io/npm/l/@peiyanlu/create-project.svg)](https://npmjs.com/package/@peiyanlu/create-project)
+[![downloads](https://img.shields.io/npm/dm/@peiyanlu/create-project.svg)](https://npmjs.com/package/@peiyanlu/create-project)
+[![node](https://img.shields.io/node/v/@peiyanlu/create-project.svg)](https://nodejs.org)
+[![size](https://packagephobia.com/badge?p=@peiyanlu/create-project)](https://packagephobia.com/result?p=@peiyanlu/create-project)
+[![deps](https://img.shields.io/librariesio/release/npm/@peiyanlu/create-project)](https://libraries.io/npm/%40peiyanlu%2Fcreate-project)
+[![build](https://img.shields.io/github/actions/workflow/status/peiyanlu/create-project/test.yaml?branch=master&logo=github)](https://github.com/peiyanlu/create-project/actions)
+[![coverage](https://coveralls.io/repos/github/peiyanlu/create-project/badge.svg?branch=master)](https://coveralls.io/github/peiyanlu/create-project?branch=master)
 
 ## Scaffolding Your New Project
 

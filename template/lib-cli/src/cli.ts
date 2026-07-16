@@ -3,7 +3,6 @@ import { red } from 'ansis'
 import { program } from 'commander'
 import { join } from 'path'
 import { Action } from './action.js'
-import { __dirname } from './utils.js'
 
 
 const pkg = readJsonFile(join(__dirname, '..', 'package.json'))

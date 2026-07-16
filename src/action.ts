@@ -14,10 +14,11 @@ import {
   toValidPackageName,
   toValidProjectName,
 } from '@peiyanlu/cli-utils'
-import { cyan, dim } from 'ansis'
+import { cyan, dim, rgb } from 'ansis'
 import { existsSync } from 'node:fs'
 import { basename, relative, resolve } from 'node:path'
 import { scheduler } from 'node:timers/promises'
+import pkg from '../package.json' with { type: 'json' }
 import { Context } from './context.js'
 import { MESSAGES } from './messages.js'
 import { ElectronAppPlugin, ReactAppPlugin } from './plugins/app.js'
@@ -57,7 +58,7 @@ export enum Tpl {
 }
 
 
-export const assertPrompt = (value: unknown) => {
+export const assertPrompt = (value: unknown): void => {
   if (isCancel(value)) {
     cancel(MESSAGES.OPERATION_ABORTED)
     process.exit(0)
@@ -136,6 +137,8 @@ export const pluginRegistry: Record<Tpl, () => TemplatePlugin> = {
 
 export class Action {
   public async handle(cmdArgs: string | undefined, options: CliOptions): Promise<void> {
+    console.log(`${ rgb(33, 91, 184)(`i`) } ${ pkg.name } ${ dim(`v${ pkg.version }`) }\n`)
+    
     intro(cyan('create-project'))
     
     const ctx = new Context(createDefaultConfig())

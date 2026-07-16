@@ -1,5 +1,5 @@
 import { PkgManager } from '@peiyanlu/cli-utils'
-import { createTempDir, TEST_TMP_ROOT } from '@peiyanlu/test-tools'
+import { createTempDir, TEST_TMP_DIR } from '@peiyanlu/test-tools'
 import { existsSync, readFileSync } from 'node:fs'
 import { rm } from 'node:fs/promises'
 import { basename, resolve } from 'node:path'
@@ -31,7 +31,7 @@ afterEach(async () => {
 
 describe('create library project', () => {
   it('no automation and no vitest', async () => {
-    const ctx = new Context(createDefaultConfig(TEST_TMP_ROOT))
+    const ctx = new Context(createDefaultConfig(TEST_TMP_DIR))
     const template = Tpl.Lib
     const targetDir = basename(tempDir)
     Object.assign(ctx.config, {
@@ -64,7 +64,7 @@ describe('create library project', () => {
   })
   
   it('use automation but no vitest', async () => {
-    const ctx = new Context(createDefaultConfig(TEST_TMP_ROOT))
+    const ctx = new Context(createDefaultConfig(TEST_TMP_DIR))
     const template = Tpl.Lib
     const targetDir = basename(tempDir)
     Object.assign(ctx.config, {
@@ -98,7 +98,7 @@ describe('create library project', () => {
   })
   
   it('use automation and vitest', async () => {
-    const ctx = new Context(createDefaultConfig(TEST_TMP_ROOT))
+    const ctx = new Context(createDefaultConfig(TEST_TMP_DIR))
     const template = Tpl.Lib
     const targetDir = basename(tempDir)
     Object.assign(ctx.config, {
@@ -144,7 +144,7 @@ describe('create library project', () => {
 
 describe('create react project', () => {
   it('should only has renovate', async () => {
-    const ctx = new Context(createDefaultConfig(TEST_TMP_ROOT))
+    const ctx = new Context(createDefaultConfig(TEST_TMP_DIR))
     const template = Tpl.React
     const targetDir = basename(tempDir)
     Object.assign(ctx.config, {
@@ -183,7 +183,7 @@ describe('create react project', () => {
 
 describe('create electron project', () => {
   it('should not has vitest', async () => {
-    const ctx = new Context(createDefaultConfig(TEST_TMP_ROOT))
+    const ctx = new Context(createDefaultConfig(TEST_TMP_DIR))
     const template = Tpl.Electron
     const targetDir = basename(tempDir)
     Object.assign(ctx.config, {
