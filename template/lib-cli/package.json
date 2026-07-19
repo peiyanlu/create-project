@@ -22,9 +22,10 @@
   },
   "dependencies": {
     "@clack/prompts": "^1.7.0",
+    "@peiyanlu/cli-utils": "^0.0.13",
+    "@peiyanlu/node-utils": "^0.0.1",
     "ansis": "^4.3.1",
-    "commander": "^15.0.0",
-    "@peiyanlu/cli-utils": "^0.0.13"
+    "commander": "^15.0.0"
   },
   "devDependencies": {
     "@types/node": "^24.13.2",

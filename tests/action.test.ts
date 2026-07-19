@@ -54,6 +54,7 @@ describe('create library project', () => {
     expect(exist('.gitignore')).toBe(true)
     expect(exist('.npmrc')).toBe(true)
     expect(exist('pnpm-workspace.yaml')).toBe(true)
+    
     expect(exist('.github')).toBe(false)
     expect(exist('release.config.ts')).toBe(false)
     expect(exist('renovate.json')).toBe(false)
@@ -75,7 +76,7 @@ describe('create library project', () => {
       template,
       source: resolve(ctx.config.tplDir, template),
       plugin: pluginRegistry[template](),
-      pkgManager: PkgManager.PNPM,
+      pkgManager: PkgManager.NPM,
       automation: [ 'github', 'release', 'renovate' ],
       useVitest: false,
       repo: 'test/test-lib',
@@ -86,7 +87,8 @@ describe('create library project', () => {
     expect(exist('package.json')).toBe(true)
     expect(exist('.gitignore')).toBe(true)
     expect(exist('.npmrc')).toBe(true)
-    expect(exist('pnpm-workspace.yaml')).toBe(true)
+    expect(exist('pnpm-workspace.yaml')).toBe(false)
+    
     expect(exist('.github')).toBe(true)
     expect(exist('release.config.ts')).toBe(true)
     expect(exist('renovate.json')).toBe(true)
@@ -121,6 +123,7 @@ describe('create library project', () => {
     expect(exist('.gitignore')).toBe(true)
     expect(exist('.npmrc')).toBe(true)
     expect(exist('pnpm-workspace.yaml')).toBe(true)
+    
     expect(exist('.github')).toBe(true)
     expect(exist('release.config.ts')).toBe(true)
     expect(exist('renovate.json')).toBe(true)

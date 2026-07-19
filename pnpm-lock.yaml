@@ -213,9 +213,9 @@ importers:
       '@peiyanlu/cli-utils':
         specifier: ^0.0.13
         version: 0.0.13
-      '@vitest/coverage-v8':
-        specifier: ^4.1.10
-        version: 4.1.10(vitest@4.1.10)
+      '@peiyanlu/node-utils':
+        specifier: ^0.0.1
+        version: 0.0.1
       ansis:
         specifier: ^4.3.1
         version: 4.3.1
@@ -235,6 +235,9 @@ importers:
       '@types/node':
         specifier: ^24.13.3
         version: 24.13.3
+      '@vitest/coverage-v8':
+        specifier: ^4.1.10
+        version: 4.1.10(vitest@4.1.10)
       publint:
         specifier: ^0.3.21
         version: 0.3.21
@@ -396,6 +399,10 @@ packages:
   '@peiyanlu/cli-utils@0.0.13':
     resolution: {integrity: sha512-YcKCAJUIOcPRPcywIDirCTwwTUQ4zOBzYGFNlNFR+ziWto5yTTT3S3sPgTY9HT262irzlwzOuy5gKYCdfuYNBA==}
     engines: {node: '>=20'}
+
+  '@peiyanlu/node-utils@0.0.1':
+    resolution: {integrity: sha512-lRbyFdmKaODkBDA+0hlji2+XfRM5/WFKr/dQLUysvmqJllx341+KaYhz2gjH69bwxUWXwqRnJLlVv7I5SRU1ag==}
+    engines: {node: '>=22'}
 
   '@peiyanlu/release@1.1.2':
     resolution: {integrity: sha512-eJIwWhrHI1Q4icdsBuqB//OtNp/j2qeiuo25IJgrKyKuoFw/CdOiaR5ASRweIhj29a2X4rqUw5+DnqRZ03c+LQ==}
@@ -1489,6 +1496,8 @@ snapshots:
       '@peiyanlu/ts-utils': 0.0.8
       ansis: 4.3.1
       semver: 7.8.5
+
+  '@peiyanlu/node-utils@0.0.1': {}
 
   '@peiyanlu/release@1.1.2(conventional-commits-filter@6.0.1)':
     dependencies:

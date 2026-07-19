@@ -1,4 +1,5 @@
-import { copyDirAsync, type CopyOptions, editFile, editJsonFile, eol } from '@peiyanlu/cli-utils'
+import { eol } from '@peiyanlu/cli-utils'
+import { copyDir, type CopyDirOptions, editFile, editJsonFile } from '@peiyanlu/node-utils'
 import { randomUUID, type UUID } from 'node:crypto'
 import { writeFileSync } from 'node:fs'
 import { type RealContext, Tpl } from '../action.js'
@@ -11,7 +12,7 @@ export class AppPlugin extends BasePlugin {
   override async beforeCopy(ctx: RealContext) {
     const { target, tplAppDir } = ctx.config
     
-    await copyDirAsync(tplAppDir, target, this.getCopyOptions(ctx))
+    await copyDir(tplAppDir, target, this.getCopyOptions(ctx))
     
     await super.beforeCopy(ctx)
   }
@@ -45,7 +46,7 @@ export class ReactAppPlugin extends AppPlugin {
 export class ElectronAppPlugin extends AppPlugin {
   name = Tpl.Electron
   
-  override getCopyOptions(ctx: RealContext): CopyOptions {
+  override getCopyOptions(ctx: RealContext): CopyDirOptions {
     const { automation } = ctx.config
     const github = [ '_github' ]
     
@@ -100,7 +101,7 @@ export class ElectronAppPlugin extends AppPlugin {
       return [ content, extra ].join('\n')
     })
     
-    await editJsonFile('./renovate.json', json => {
+    await editJsonFile<Record<string, any>>('./renovate.json', json => {
       json.packageRules ??= []
       const idx = json.packageRules.findIndex((k: any) => k.matchPackageNames)
       if (idx >= 0) {

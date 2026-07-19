@@ -19,6 +19,7 @@
     "build": "tsdown",
     "prepublishOnly": "tsdown"
   },
+  "dependencies": {},
   "devDependencies": {
     "@types/node": "^24.13.2",
     "publint": "^0.3.21",

@@ -1,11 +1,13 @@
-import { type CliOptions, readJsonFile } from '@peiyanlu/cli-utils'
+import { log } from '@clack/prompts'
+import { type CliOptions } from '@peiyanlu/cli-utils'
+import { readJsonFileSync } from '@peiyanlu/node-utils'
 import { red } from 'ansis'
 import { program } from 'commander'
 import { join } from 'path'
 import { Action } from './action.js'
 
 
-const pkg = readJsonFile(join(__dirname, '..', 'package.json'))
+const pkg = readJsonFileSync<Record<string, any>>(join(__dirname, '..', 'package.json'))
 
 program
   .name(pkg.name)
@@ -16,6 +18,10 @@ program
   .option('-d, --dry-run', 'Report actions that would be performed without writing out results.', false)
   .action(async (argName: string, options: CliOptions) => {
     await new Action().handle(argName, options)
+      .catch(error => {
+        log.error(error.stack)
+        throw error
+      })
   })
   .helpOption('-h, --help', 'Output usage information.')
   .parse(process.argv)

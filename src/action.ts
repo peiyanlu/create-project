@@ -3,10 +3,7 @@ import {
   checkVersion,
   type CliOptions,
   ConfirmResult,
-  copyDirAsync,
-  emptyDir,
   execAsync,
-  isEmpty,
   isGitRepo,
   isValidPackageName,
   PkgManager,
@@ -14,6 +11,7 @@ import {
   toValidPackageName,
   toValidProjectName,
 } from '@peiyanlu/cli-utils'
+import { copyDir, emptyDir, isDirEmpty } from '@peiyanlu/node-utils'
 import { cyan, dim, rgb } from 'ansis'
 import { existsSync } from 'node:fs'
 import { basename, relative, resolve } from 'node:path'
@@ -90,7 +88,7 @@ export const createDefaultConfig = (cwd = process.cwd()): PromptsResult => {
 const handleDirConflict = async (targetDir: string, options: CliOptions): Promise<void> => {
   const isExists = existsSync(targetDir)
   const ignore = [ '.git', '.idea', '.vscode' ]
-  if (isExists && !await isEmpty(targetDir, ignore)) {
+  if (isExists && !await isDirEmpty(targetDir, ignore)) {
     const overwrite = options.overwrite
       ? ConfirmResult.YES
       : await select({
@@ -165,10 +163,10 @@ export class Action {
         task: async () => {
           await plugin.beforeCopy(ctx)
           
-          await copyDirAsync(tplBaseDir, target, plugin.getCopyOptions(ctx))
+          await copyDir(tplBaseDir, target, plugin.getCopyOptions(ctx))
           await scheduler.yield()
           
-          await copyDirAsync(source, target, plugin.getCopyOptions(ctx))
+          await copyDir(source, target, plugin.getCopyOptions(ctx))
           await scheduler.yield()
           
           // -----------------------------------------------------

@@ -1,13 +1,6 @@
 import { multiselect, text } from '@clack/prompts'
-import {
-  checkVersion,
-  type CopyOptions,
-  editFile,
-  editJsonFile,
-  gitConfigGet,
-  PkgManager,
-  stringifyArgs,
-} from '@peiyanlu/cli-utils'
+import { checkVersion, gitConfigGet, PkgManager, stringifyArgs } from '@peiyanlu/cli-utils'
+import { type CopyDirOptions, editFile, editJsonFile } from '@peiyanlu/node-utils'
 import { assertPrompt, type RealContext, Tpl } from '../action.js'
 import { render } from '../handlebars.js'
 import { MESSAGES } from '../messages.js'
@@ -47,7 +40,7 @@ export interface TemplatePlugin {
   
   extendPrompts(ctx: RealContext): Promise<void>
   
-  getCopyOptions(ctx: RealContext): CopyOptions
+  getCopyOptions(ctx: RealContext): CopyDirOptions
   
   beforeCopy(ctx: RealContext): Promise<void>
   
@@ -125,7 +118,7 @@ export class BasePlugin implements TemplatePlugin {
     assertPrompt(ctx.config.repo)
   }
   
-  getCopyOptions(ctx: RealContext): CopyOptions {
+  getCopyOptions(ctx: RealContext): CopyDirOptions {
     const { pkgManager, automation } = ctx.config
     const pnpmFiles: string[] = [ 'pnpm-workspace.yaml' ]
     const renovate = [ 'renovate.json' ]
@@ -140,7 +133,7 @@ export class BasePlugin implements TemplatePlugin {
         ...this.copyRename,
       },
       
-      skips: [
+      ignore: [
         // automation
         (name: string) => !automation.includes('renovate') && renovate.includes(name),
         
@@ -160,7 +153,7 @@ export class BasePlugin implements TemplatePlugin {
     
     const useGitHub = automation.includes('github')
     
-    await editJsonFile('./package.json', async (pkg) => {
+    await editJsonFile<Record<string, any>>('./package.json', async (pkg) => {
       pkg.name = packageName
       pkg.description = description
       pkg.author.name = name

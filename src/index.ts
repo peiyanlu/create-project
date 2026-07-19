@@ -1,12 +1,13 @@
 import { log } from '@clack/prompts'
-import { readJsonFile } from '@peiyanlu/cli-utils'
+import type { CliOptions } from '@peiyanlu/cli-utils'
+import { readJsonFileSync } from '@peiyanlu/node-utils'
 import { Ansis, blueBright, cyan, gray, greenBright, magenta, red, redBright, yellow } from 'ansis'
 import { program } from 'commander'
 import { join } from 'node:path'
 import { Action, Tpl } from './action.js'
 
 
-const pkg = readJsonFile(join(__dirname, '..', 'package.json'))
+const pkg = readJsonFileSync<Record<string, any>>(join(__dirname, '..', 'package.json'))
 
 const TEMPLATES: [ Ansis, string ][] = [
   [ yellow, Tpl.Electron ],
@@ -26,7 +27,7 @@ program
   .option('-d, --dry-run', 'Report actions that would be performed without writing out results.', false)
   .option('-o, --overwrite', 'When the target directory is not empty, the contents will be overwritten.', false)
   .option('-t, --template <template>', 'Use a specific template.', undefined)
-  .action(async (argName: string, options: Record<string, boolean | string>) => {
+  .action(async (argName: string, options: CliOptions) => {
     await new Action().handle(argName, options)
       .catch(error => {
         log.error(error.stack)

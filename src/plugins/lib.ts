@@ -1,5 +1,6 @@
 import { confirm } from '@clack/prompts'
-import { copyDirAsync, type CopyOptions, editFile, editJsonFile, eol, isTestFile } from '@peiyanlu/cli-utils'
+import { eol, isTestFile } from '@peiyanlu/cli-utils'
+import { copyDir, type CopyDirOptions, editFile, editJsonFile } from '@peiyanlu/node-utils'
 import { writeFileSync } from 'node:fs'
 import { assertPrompt, type RealContext, Tpl } from '../action.js'
 import { MESSAGES } from '../messages.js'
@@ -19,7 +20,7 @@ export class LibPlugin extends BasePlugin {
     assertPrompt(ctx.config.useVitest)
   }
   
-  override getCopyOptions(ctx: RealContext): CopyOptions {
+  override getCopyOptions(ctx: RealContext): CopyDirOptions {
     const { useVitest, automation } = ctx.config
     const github = [ '_github' ]
     const testActions = [ 'test.yaml' ]
@@ -44,7 +45,7 @@ export class LibPlugin extends BasePlugin {
   override async beforeCopy(ctx: RealContext) {
     const { target, tplLibDir } = ctx.config
     
-    await copyDirAsync(tplLibDir, target, this.getCopyOptions(ctx))
+    await copyDir(tplLibDir, target, this.getCopyOptions(ctx))
     
     await super.beforeCopy(ctx)
   }
@@ -112,7 +113,7 @@ export class LibCliPlugin extends LibPlugin {
     ])
     ctx.setBin({ [name]: 'index.js' })
     
-    await editJsonFile('./renovate.json', json => {
+    await editJsonFile<Record<string, any>>('./renovate.json', json => {
       json.customManagers ??= []
       json.customManagers.push(...[
         {
@@ -168,7 +169,7 @@ export class LibPluginPlugin extends LibPlugin {
   name = Tpl.Plugin
   
   override async afterCopy(ctx: RealContext): Promise<void> {
-    await editJsonFile('./renovate.json', json => {
+    await editJsonFile<Record<string, any>>('./renovate.json', json => {
       json.packageRules ??= []
       json.packageRules.push(...[
         {
