@@ -51,16 +51,16 @@
     "dist",
     "template"
   ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/peiyanlu/create-project.git"
   },
-  "homepage": "https://github.com/peiyanlu/create-project#readme",
   "bugs": {
     "url": "https://github.com/peiyanlu/create-project/issues"
   },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org"
-  }
+  "homepage": "https://github.com/peiyanlu/create-project#readme"
 }
