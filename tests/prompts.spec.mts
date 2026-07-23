@@ -276,7 +276,7 @@ describe('create: exit on non-empty dir', () => {
     // provide cmdArgs and options, emulate command-line arguments
     const res = action.handlePrompts(undefined, { overwrite: false }, ctx)
     await expect(res).rejects.toThrow('process.exit')
-    await expect(res).rejects.toMatchObject({ code: 0 })
+    await expect(res).rejects.toMatchObject({ message: 'process.exit unexpectedly called with "0"' })
     
     expect(text).toHaveBeenCalled()
     expect(select).toHaveBeenCalled()

@@ -15,8 +15,8 @@ const file = join(__dirname, '..', `renderer/${ MAIN_WINDOW_VITE_NAME }/index.ht
 const frontendURL = MAIN_WINDOW_VITE_DEV_SERVER_URL ?? file
 
 
-const iconDir = isDev ? 'icons/dev' : 'icons/prod'
-const getIcon = (root: string, tray?: boolean) => join(root, iconDir, `icon.${ getIconExt(tray) }`)
+const getIcon = (root: string, tray?: boolean) =>
+  join(root, 'icons', isDev ? 'dev' : 'prod', `icon.${ getIconExt(tray) }`)
 
 const appIcon = getIcon(__dirname)
 const trayIcon = getIcon(isDev ? __dirname : process.resourcesPath, true)

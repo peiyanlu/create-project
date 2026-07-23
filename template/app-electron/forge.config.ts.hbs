@@ -14,7 +14,7 @@ import pkg from './package.json'
 
 const iconResDir = 'resources/icons'
 
-const joinPath = (...paths: string[]) => join(__dirname, `${ iconResDir }/prod`, ...paths)
+const joinPath = (...paths: string[]) => join(__dirname, iconResDir, 'prod', ...paths)
 
 const executableName = isLinux ? pkg.productName.toLowerCase() : undefined
 

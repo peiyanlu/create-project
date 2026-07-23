@@ -11,6 +11,7 @@ export default defineConfig({
     },
     projects: [
       {
+        extends: true,
         test: {
           name: {
             label: 'scenario',

@@ -1,3 +1,4 @@
+import { resolve } from 'path'
 import { defineConfig } from 'vite'
 import pkg from './package.json' with { type: 'json' }
 
@@ -9,6 +10,11 @@ declare global {
 
 export default defineConfig({
   publicDir: 'resources',
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, 'src'),
+    },
+  },
   define: {
     APP_NAME: JSON.stringify(pkg.productName),
     APP_VERSION: JSON.stringify(`v${ pkg.version }`),
