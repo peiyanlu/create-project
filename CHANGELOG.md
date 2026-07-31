@@ -1,3 +1,14 @@
+## <small>[0.0.9](https://github.com/peiyanlu/create-project/compare/v0.0.8...v0.0.9) (2026-07-31)</small>
+
+### 🐛 Bug 修复
+
+* 修复测试工作流失败 ([eaf4488](https://github.com/peiyanlu/create-project/commit/eaf4488d51df259001d96647b48d2304a3e49d69))
+* **deps:** 升级 npm 依赖 ([#11](https://github.com/peiyanlu/create-project/issues/11)) ([0403ffe](https://github.com/peiyanlu/create-project/commit/0403ffe42dede0ccecca219c1ca3cc70b2dff7a9))
+
+### ♻️ 代码重构
+
+* 迁移 fs 工具 ([4ff4f98](https://github.com/peiyanlu/create-project/commit/4ff4f9873e5473041053539f9c85ad2f429f9bd9))
+
 ## <small>[0.0.8](https://github.com/peiyanlu/create-project/compare/v0.0.7...v0.0.8) (2026-07-14)</small>
 
 ### ♻️ 代码重构
