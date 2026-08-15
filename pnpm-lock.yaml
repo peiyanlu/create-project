@@ -211,11 +211,11 @@ importers:
         specifier: ^1.7.0
         version: 1.7.0
       '@peiyanlu/cli-utils':
-        specifier: ^0.0.14
-        version: 0.0.14
+        specifier: ^0.0.15
+        version: 0.0.15
       '@peiyanlu/node-utils':
-        specifier: ^0.0.2
-        version: 0.0.2
+        specifier: ^0.0.4
+        version: 0.0.4
       ansis:
         specifier: ^4.3.1
         version: 4.3.1
@@ -227,11 +227,11 @@ importers:
         version: 4.7.9
     devDependencies:
       '@peiyanlu/release':
-        specifier: ^1.1.2
-        version: 1.1.2(conventional-commits-filter@6.0.1)
+        specifier: ^1.2.1
+        version: 1.2.1(conventional-commits-filter@6.0.1)
       '@peiyanlu/test-tools':
-        specifier: ^0.0.4
-        version: 0.0.4
+        specifier: ^0.0.7
+        version: 0.0.7
       '@types/node':
         specifier: ^24.13.3
         version: 24.13.3
@@ -239,11 +239,11 @@ importers:
         specifier: ^4.1.10
         version: 4.1.10(vitest@4.1.10)
       publint:
-        specifier: ^0.3.22
-        version: 0.3.22
+        specifier: ^0.3.23
+        version: 0.3.23
       tsdown:
         specifier: ^0.22.14
-        version: 0.22.14(publint@0.3.22)(typescript@6.0.3)
+        version: 0.22.14(publint@0.3.23)(typescript@6.0.3)
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -344,12 +344,6 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@napi-rs/wasm-runtime@1.1.6':
-    resolution: {integrity: sha512-ZLv/JdUfkvOy9eCnnBaGfiO+XimbjebAeO+MRQqD/B+FR1tnRN0tpKSJHRbE8sFfS6aqsXZ67TQjfwfsxULVbg==}
-    peerDependencies:
-      '@emnapi/core': ^1.7.1
-      '@emnapi/runtime': ^1.7.1
-
   '@napi-rs/wasm-runtime@1.2.1':
     resolution: {integrity: sha512-KjZdi8Q1wh89gsVmghvbrMgWl6ZWmRmHV6wjB7/g4Zf0dyO+hH3neZUtuDNPO00qq5YE5RITVWvrIZKRaAmzGQ==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=23.5.0}
@@ -415,41 +409,33 @@ packages:
   '@oxc-project/types@0.142.0':
     resolution: {integrity: sha512-7W+2q5AKQVU36fkaryontrHn3YDt1RyUYXatw9i5H8ocYe2sPKSFB6eS8WNPeRKiN1qAWWZUPm7gwFzJGrccqQ==}
 
-  '@peiyanlu/cli-utils@0.0.13':
-    resolution: {integrity: sha512-YcKCAJUIOcPRPcywIDirCTwwTUQ4zOBzYGFNlNFR+ziWto5yTTT3S3sPgTY9HT262irzlwzOuy5gKYCdfuYNBA==}
+  '@peiyanlu/cli-utils@0.0.15':
+    resolution: {integrity: sha512-ZgKvh1fe5y8qRylEQJbZ97v5cqV8HjCdrVmmwf1dnLh+RmH7RVa2eE9BeU+NalnPCNF+JenISuHfbyeMb7nZnw==}
     engines: {node: '>=20'}
 
-  '@peiyanlu/cli-utils@0.0.14':
-    resolution: {integrity: sha512-kWPAKYXa8EOSH0pnvkPSYz9ocs5Fz72Vn68lufEAy70TLHQMWhj/IJ12G7OvfOWQuRCbb4950m1kqD7/32h5cA==}
-    engines: {node: '>=20'}
-
-  '@peiyanlu/node-utils@0.0.2':
-    resolution: {integrity: sha512-mX0WtbYinIGo40WSUTmFFsOLOcZS1js6pLA40KWEkRvX3aIpvPa5Sdk38FTL2ccMLWNLESv2Ha8h0dXtHIH/Aw==}
+  '@peiyanlu/node-utils@0.0.3':
+    resolution: {integrity: sha512-Xby5gPugQKDK/scKkRi11tb7znZJeXPovxFbAgmu4E9ca4u5qNe9YPwiK9qbHVPapWP8RhFQsSjsOg5YAlNI/Q==}
     engines: {node: '>=22'}
 
-  '@peiyanlu/release@1.1.2':
-    resolution: {integrity: sha512-eJIwWhrHI1Q4icdsBuqB//OtNp/j2qeiuo25IJgrKyKuoFw/CdOiaR5ASRweIhj29a2X4rqUw5+DnqRZ03c+LQ==}
+  '@peiyanlu/node-utils@0.0.4':
+    resolution: {integrity: sha512-C+qX7RdknEVL/4kj15KeRMmNDEVke89W+iARbgRXL1WkTk9GFxXVLNM9I4++ytGSwSaC6Od+GeGVpRPBz5TyyQ==}
+    engines: {node: '>=22'}
+
+  '@peiyanlu/release@1.2.1':
+    resolution: {integrity: sha512-Jv/L3m/N8FbPvK9tUtgyeNhYICKSxpo9NU/YlO7aTF72QdFahmj0YWYKOoiaegVr6Dj124g3KZCwSXv7RZ5XNw==}
     engines: {node: '>=20'}
     hasBin: true
 
-  '@peiyanlu/test-tools@0.0.4':
-    resolution: {integrity: sha512-1Wp37dv4BrmGcRtJ4v9pMSujthQSYdA8XATRnqv6C/VXJineVBzTgnL1RqEgNVcUkluC2xFmhcY4JSqsDKYaUg==}
+  '@peiyanlu/test-tools@0.0.7':
+    resolution: {integrity: sha512-hTDBWgh2In2+JyOoBYmIfbBMrosauzQyCmMZ0DdCOlr77kJBQkL7McRFwSC2bI6hUoogwNHElIfC3sakolXdSA==}
     engines: {node: '>=22'}
-
-  '@peiyanlu/ts-utils@0.0.10':
-    resolution: {integrity: sha512-Xp4EoHITpyXi8zy7ftOUzwgMld6G5BPqkt8ClivgpjXaydwFkulXiZlC2UZCicjj16aIFaYS9nPr3Pt1ZfDE9g==}
-    engines: {node: '>=20.0.0'}
 
   '@peiyanlu/ts-utils@0.0.11':
     resolution: {integrity: sha512-0x9PC1A6ogLkPuycq9nHC2YkfKwgGLIzPIXNF7J4r67CXHS/Xj8x87X1I+i4YZhKWgdRqA+ucZwSAT4AtwZBYA==}
     engines: {node: '>=20.0.0'}
 
-  '@peiyanlu/ts-utils@0.0.8':
-    resolution: {integrity: sha512-Pk19z1Ihcvvu5VP8dAK+QgrZGnFdxVP8To27asAHq54OijzhdouEUHufxuCy9aCAMdfdZlTvqqY8ovWsIyP6Hg==}
-    engines: {node: '>=20.0.0'}
-
-  '@peiyanlu/ts-utils@0.0.9':
-    resolution: {integrity: sha512-05Ea15l/YYF99OkbnL8efac3u3UiQGeZc1Tf0AvCufRueIqwU8Y/JW7bL7hYa2MBHQrvOPxrhNUsEMj0rjXlbw==}
+  '@peiyanlu/ts-utils@0.0.12':
+    resolution: {integrity: sha512-4J6KdTOcozak1q158GAQiV9FwtUdMPFmcGJfAkx+hS1oRl3k2hQDY4p0seLVhXWfJtPhcXbWvS7VE9uBIfWiTw==}
     engines: {node: '>=20.0.0'}
 
   '@publint/pack@0.1.6':
@@ -1205,6 +1191,11 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
+  publint@0.3.23:
+    resolution: {integrity: sha512-5MQipUPcB7MWw84zLUkHrg/H/UBtk3LL+A0GngTTBSsiNJLQurMUaSIRG3edlOrRz4UFe0AOKK9TZdIWviV+jQ==}
+    engines: {node: '>=18'}
+    hasBin: true
+
   quansync@1.0.0:
     resolution: {integrity: sha512-5xZacEEufv3HSTPQuchrvV6soaiACMFnq1H8wkVioctoH3TRha9Sz66lOxRwPK/qZj7HPiSveih9yAyh98gvqA==}
 
@@ -1585,7 +1576,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@napi-rs/wasm-runtime@1.1.6(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)':
+  '@napi-rs/wasm-runtime@1.2.1(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)':
     dependencies:
       '@emnapi/core': 1.11.1
       '@emnapi/runtime': 1.11.1
@@ -1666,39 +1657,41 @@ snapshots:
 
   '@oxc-project/types@0.142.0': {}
 
-  '@peiyanlu/cli-utils@0.0.13':
+  '@peiyanlu/cli-utils@0.0.15':
     dependencies:
-      '@peiyanlu/ts-utils': 0.0.8
+      '@peiyanlu/ts-utils': 0.0.12
       ansis: 4.3.1
       semver: 7.8.5
 
-  '@peiyanlu/cli-utils@0.0.14':
-    dependencies:
-      '@peiyanlu/ts-utils': 0.0.10
-      ansis: 4.3.1
-      semver: 7.8.5
-
-  '@peiyanlu/node-utils@0.0.2':
+  '@peiyanlu/node-utils@0.0.3':
     dependencies:
       '@peiyanlu/ts-utils': 0.0.11
       minimatch: 10.2.6
       tinyglobby: 0.2.17
 
-  '@peiyanlu/release@1.1.2(conventional-commits-filter@6.0.1)':
+  '@peiyanlu/node-utils@0.0.4':
+    dependencies:
+      '@peiyanlu/ts-utils': 0.0.12
+      minimatch: 10.2.6
+      tinyglobby: 0.2.17
+
+  '@peiyanlu/release@1.2.1(conventional-commits-filter@6.0.1)':
     dependencies:
       '@actions/core': 3.0.1
       '@actions/github': 9.1.1
       '@clack/prompts': 1.7.0
       '@conventional-changelog/template': 1.2.1
       '@octokit/rest': 22.0.1
-      '@peiyanlu/cli-utils': 0.0.13
-      '@peiyanlu/ts-utils': 0.0.9
+      '@peiyanlu/cli-utils': 0.0.15
+      '@peiyanlu/node-utils': 0.0.3
+      '@peiyanlu/ts-utils': 0.0.12
       ansis: 4.3.1
       commander: 15.0.0
       conventional-changelog: 8.1.0(conventional-commits-filter@6.0.1)
       conventional-changelog-conventionalcommits: 10.2.1
       conventional-recommended-bump: 12.1.0
       mime-types: 3.0.2
+      minimatch: 10.2.6
       open: 11.0.0
       publint: 0.3.22
       semver: 7.8.5
@@ -1706,15 +1699,13 @@ snapshots:
     transitivePeerDependencies:
       - conventional-commits-filter
 
-  '@peiyanlu/test-tools@0.0.4': {}
-
-  '@peiyanlu/ts-utils@0.0.10': {}
+  '@peiyanlu/test-tools@0.0.7':
+    dependencies:
+      '@peiyanlu/ts-utils': 0.0.12
 
   '@peiyanlu/ts-utils@0.0.11': {}
 
-  '@peiyanlu/ts-utils@0.0.8': {}
-
-  '@peiyanlu/ts-utils@0.0.9': {}
+  '@peiyanlu/ts-utils@0.0.12': {}
 
   '@publint/pack@0.1.6':
     dependencies:
@@ -1800,7 +1791,7 @@ snapshots:
     dependencies:
       '@emnapi/core': 1.11.1
       '@emnapi/runtime': 1.11.1
-      '@napi-rs/wasm-runtime': 1.1.6(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
+      '@napi-rs/wasm-runtime': 1.2.1(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
     optional: true
 
   '@rolldown/binding-wasm32-wasi@1.2.1':
@@ -2269,6 +2260,13 @@ snapshots:
       picocolors: 1.1.1
       sade: 1.8.1
 
+  publint@0.3.23:
+    dependencies:
+      '@publint/pack': 0.1.6
+      package-manager-detector: 1.7.0
+      picocolors: 1.1.1
+      sade: 1.8.1
+
   quansync@1.0.0: {}
 
   resolve-pkg-maps@1.0.0: {}
@@ -2366,7 +2364,7 @@ snapshots:
 
   tree-kill@1.2.2: {}
 
-  tsdown@0.22.14(publint@0.3.22)(typescript@6.0.3):
+  tsdown@0.22.14(publint@0.3.23)(typescript@6.0.3):
     dependencies:
       ansis: 4.3.1
       cac: 7.0.0
@@ -2384,7 +2382,7 @@ snapshots:
       unconfig-core: 7.5.0
       verkit: 0.3.1
     optionalDependencies:
-      publint: 0.3.22
+      publint: 0.3.23
       typescript: 6.0.3
     transitivePeerDependencies:
       - '@typescript/native-preview'
