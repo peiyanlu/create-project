@@ -19,7 +19,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "publint": "^0.3.23",
+    "publint": "^0.3.24",
     "typescript": "^6.0.3",
     "tsdown": "^0.22.14"
   },
