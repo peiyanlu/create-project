@@ -21,7 +21,7 @@
   "devDependencies": {
     "publint": "^0.3.25",
     "typescript": "^6.0.3",
-    "tsdown": "^0.23.1"
+    "tsdown": "^0.23.7"
   },
   "author": {
     "name": "",

@@ -19,17 +19,17 @@
     "prepublishOnly": "tsdown"
   },
   "dependencies": {
-    "@clack/prompts": "^1.8.1",
+    "@clack/prompts": "^1.9.0",
     "@peiyanlu/cli-utils": "^0.0.15",
-    "@peiyanlu/node-utils": "^0.0.4",
-    "ansis": "^4.4.0",
-    "commander": "^15.0.0"
+    "@peiyanlu/node-utils": "^0.1.1",
+    "ansis": "^4.5.0",
+    "commander": "^15.1.0"
   },
   "devDependencies": {
     "@types/node": "^24.13.2",
     "publint": "^0.3.25",
     "typescript": "^6.0.3",
-    "tsdown": "^0.23.1"
+    "tsdown": "^0.23.7"
   },
   "author": {
     "name": "",
