@@ -227,8 +227,8 @@ importers:
         version: 4.7.10
     devDependencies:
       '@peiyanlu/release':
-        specifier: ^1.3.1
-        version: 1.3.1(conventional-commits-filter@6.0.1)
+        specifier: ^2.3.0
+        version: 2.3.0
       '@peiyanlu/test-tools':
         specifier: ^0.0.7
         version: 0.0.7
@@ -249,7 +249,7 @@ importers:
         version: 6.0.3
       vitest:
         specifier: ^4.1.12
-        version: 4.1.12(@types/node@24.13.3)(@vitest/coverage-v8@4.1.12)(vite@8.1.2(@types/node@24.13.3)(yaml@2.9.0))
+        version: 4.1.12(@types/node@24.13.3)(@vitest/coverage-v8@4.1.12)(vite@8.1.2(@types/node@24.13.3)(yaml@2.9.1))
 
 packages:
 
@@ -300,20 +300,20 @@ packages:
     resolution: {integrity: sha512-tEj8X2No2A1c9NDnZECxiiJ8TP3vmFlN9tLlLeSaMqVW4tUmVG2R4qpv/eP4zymWxnymYLkLcIYVV0VcWj3RCQ==}
     engines: {node: '>= 20.12.0'}
 
-  '@conventional-changelog/git-client@3.1.0':
-    resolution: {integrity: sha512-Tqa/gHco2WJWa740NRjOrfKVvzIqxkZpecb8bemaQ8sKM5PXb1UK4uTyTb/1wIqNuOVaDOFxyBdhTIQZn6gdjQ==}
+  '@conventional-changelog/git-client@3.2.0':
+    resolution: {integrity: sha512-sD/E0vzpkoDz/dqM1Hhv0ihC4KBw6RXjefeO8SG1XrX+wGkMxe1pKeedkKDPCtr2JjuhbuS9aJNgOvnT8hbeBw==}
     engines: {node: '>=22'}
     peerDependencies:
       conventional-commits-filter: ^6.0.1
-      conventional-commits-parser: ^7.0.1
+      conventional-commits-parser: ^7.1.3
     peerDependenciesMeta:
       conventional-commits-filter:
         optional: true
       conventional-commits-parser:
         optional: true
 
-  '@conventional-changelog/template@1.2.1':
-    resolution: {integrity: sha512-TzlTVpKPjaqW6qOYjQcYUDuGsLCNsvFHVBXkYGTAnf5V37jCWrE5haKNXzz0WZUtVHjrpV76L1buANjwXMfT8w==}
+  '@conventional-changelog/template@1.4.1':
+    resolution: {integrity: sha512-mHyyEL0eIEqJ6+aF24+AdZRo4bu4W5GdUiCiCx5X7kfDY51ye8GQJ264uOINObrRSKxtSRCOWPpl9hbOy4UzxQ==}
     engines: {node: '>=22'}
 
   '@emnapi/core@1.11.1':
@@ -334,6 +334,9 @@ packages:
   '@emnapi/wasi-threads@2.2.0':
     resolution: {integrity: sha512-JP7OYH38Q7+pyTAe14raZHLQIK7BDKbdwji+Xi3pcd/6QkJYQH3SX4wu6EplGrGJWRepoNzedfm0G3B9Z4e9Rw==}
 
+  '@isaacs/nonrecursive-glob-match@1.1.0':
+    resolution: {integrity: sha512-GPm/Dbvk5RLmhRnxXIa7nTpK0xtl4E0wj0MslsuNiJ1FIROU+2+9lgUC/dgF7Ey4QCWhfEsgxilMRMCdHPfDfw==}
+
   '@jridgewell/resolve-uri@3.1.2':
     resolution: {integrity: sha512-bRISgCIjP20/tbWSPWMEi54QVPRZExkuD9lJL+UIxUKtwVJA8wW1Trb1jMs1RFXo1CBTNZ/5hpC9QvmKWdopKw==}
     engines: {node: '>=6.0.0'}
@@ -343,13 +346,6 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
-
-  '@napi-rs/wasm-runtime@1.2.1':
-    resolution: {integrity: sha512-KjZdi8Q1wh89gsVmghvbrMgWl6ZWmRmHV6wjB7/g4Zf0dyO+hH3neZUtuDNPO00qq5YE5RITVWvrIZKRaAmzGQ==}
-    engines: {node: ^20.19.0 || ^22.13.0 || >=23.5.0}
-    peerDependencies:
-      '@emnapi/core': ^1.7.1 || ^2.0.0-alpha.3
-      '@emnapi/runtime': ^1.7.1 || ^2.0.0-alpha.3
 
   '@napi-rs/wasm-runtime@1.2.6':
     resolution: {integrity: sha512-mRyDmEw9/fCDXCGfL1sbgIw/GUK0PVxRW4YwgPN61F3LQ+fSyoBFarJVzgGyhF6kRzEQZ0FejDqm4WLXSeqQmw==}
@@ -420,17 +416,34 @@ packages:
     resolution: {integrity: sha512-ZgKvh1fe5y8qRylEQJbZ97v5cqV8HjCdrVmmwf1dnLh+RmH7RVa2eE9BeU+NalnPCNF+JenISuHfbyeMb7nZnw==}
     engines: {node: '>=20'}
 
-  '@peiyanlu/node-utils@0.0.4':
-    resolution: {integrity: sha512-C+qX7RdknEVL/4kj15KeRMmNDEVke89W+iARbgRXL1WkTk9GFxXVLNM9I4++ytGSwSaC6Od+GeGVpRPBz5TyyQ==}
+  '@peiyanlu/cli-utils@1.1.1':
+    resolution: {integrity: sha512-ItoqlC8elHWffyXOANz/xrlfcrQDpcHb8f/YRzRiEA32L+Yo2/dV9EHrpjCNZOFzDZzuWeZ/2VQU6xmLgdZWlw==}
+    engines: {node: '>=22'}
+    peerDependencies:
+      '@clack/prompts': ^1.9.0
+    peerDependenciesMeta:
+      '@clack/prompts':
+        optional: true
+
+  '@peiyanlu/command-utils@0.1.0':
+    resolution: {integrity: sha512-8caoCHZmfl306pcC2689m/qhQpPjS+IP1PqYYC45T1C4NKfAGkS1/mnXy9X3bDdhhNfICD0/Y6mwKw0zhnpPyw==}
+    engines: {node: '>=22'}
+
+  '@peiyanlu/git-utils@0.1.0':
+    resolution: {integrity: sha512-i8AeDqTG5uU/CK/dxDqTuR4X7ns3iXyYQhrrADjslF8UDkfcZRTGqBytWEkqqnhxbN6No32Obz8RI7bX6076Dw==}
     engines: {node: '>=22'}
 
   '@peiyanlu/node-utils@0.1.1':
     resolution: {integrity: sha512-0Qw60jl1HPbHaqiiIKIMVBufCzeRviMGyrI1pJ7u1kfWrvHcP+2PH1pQ9SSXNIie5/2dTwsyp0cQbwDEyZGjPA==}
     engines: {node: '>=22'}
 
-  '@peiyanlu/release@1.3.1':
-    resolution: {integrity: sha512-EIsK4nK/mNqPeNBfypmT39VEyiWZyrCJbYPAcNqtkGlYgtkwGdLl3/AOvvmoIxJ7FHAp4QF96WVeLoe6bShx1g==}
-    engines: {node: '>=20'}
+  '@peiyanlu/node-utils@0.2.0':
+    resolution: {integrity: sha512-1lixOIxzio4ujjd2XQg2cehboeXENMjhXtNtdYyK32KiFtCL2Lhbb9laf+oplbO8qAv2ffW5n9kl0ZLK75/aHQ==}
+    engines: {node: '>=22'}
+
+  '@peiyanlu/release@2.3.0':
+    resolution: {integrity: sha512-Rp0rlLlYy0JWqeX5xPLBQu7WXDR0iyXQjuifR32yhZcRdquGw7SV+f8CXBN2RXawWZKf+nGw3DQFS4aEmld+PQ==}
+    engines: {node: '>=22.18'}
     hasBin: true
 
   '@peiyanlu/test-tools@0.0.7':
@@ -443,6 +456,10 @@ packages:
 
   '@peiyanlu/ts-utils@1.0.0':
     resolution: {integrity: sha512-gRJyyG3868xGCG+qHG/oMGiQikPQkM5Guf71eBgEODfgDMohtmKWJcPOgm+z5cq1LvgMK1Btkm47NhwTPLW1BA==}
+    engines: {node: '>=22'}
+
+  '@peiyanlu/ts-utils@1.1.0':
+    resolution: {integrity: sha512-cHX7omExoUWVLtfDSdstDxfa09SSIh9y30jiSaPuXPH9K29g9FeE0m6IX7otPCNTcdrUMSLYiNXCTDz7Ch4TyA==}
     engines: {node: '>=22'}
 
   '@publint/pack@0.1.7':
@@ -779,6 +796,10 @@ packages:
     resolution: {integrity: sha512-ScQ4IuvIEF1TMlP7Zt+vjJ//9zlPb2SDcxWxM3bk8s6t6GGdJ7KO1dCcTidOPJKePW30LE/2cT7wCyPho9/Wxg==}
     engines: {node: 20 || >=22}
 
+  brace-expansion@5.1.0:
+    resolution: {integrity: sha512-aa11Dv491GKnYqxaul3aRJ0szew7yMJMfZPnqD44NjGrZXoj62l41OEDDpdpC4eE2P88vBFfLuSyRhpG91NUvg==}
+    engines: {node: 20 || >=22}
+
   bundle-name@4.1.0:
     resolution: {integrity: sha512-tjwM5exMg6BGRI+kNmTntNsvdZS1X8BFYS6tnJ2hdH0kVxM6/eVZ2xy+FqStSWvYmtfFMDLIxurorHwDKfDz5Q==}
     engines: {node: '>=18'}
@@ -799,21 +820,21 @@ packages:
     resolution: {integrity: sha512-j/O/d7GcZCyNl7/hwZAb606rzqkyvaDctLmckbxLzHvFBzTJHuGEdodATcP3yIRoDrLHkIATJuvzbFlp/ki2cQ==}
     engines: {node: '>=18'}
 
-  conventional-changelog-conventionalcommits@10.2.1:
-    resolution: {integrity: sha512-n4Kr1HFMTf3iMbES0TMxKIcYtUUv4rKqyQQp2JwfOEfFCOfGT3Tq4mCyJ8S9/YPyWhydjfKrrvnyl+gCjA+mJQ==}
+  conventional-changelog-conventionalcommits@10.4.1:
+    resolution: {integrity: sha512-jS1LRFSbRoAr6JbhhRy1JYfNNUj5LM3+v49hRE03CgccsiYqgdVj/RTmrw4J1rylrqijHwdOlJWiJa61JHOgHg==}
     engines: {node: '>=22'}
 
   conventional-changelog-preset-loader@6.0.1:
     resolution: {integrity: sha512-GZ8E3RQzXQb3JFy0pKl8oeSf7ENIhvAMvJr+PlWkavZOesLHHdhkfNJ4SvW35eo1Fu2+EyVxWQ1tVvtzAG2iWg==}
     engines: {node: '>=22'}
 
-  conventional-changelog-writer@9.2.0:
-    resolution: {integrity: sha512-eACD5BaAQCYjeI3RExkCZopNaaIuXzCP4kaAb2lEFXcGa/KOuxJfj8v/SnjhvF6377pYn0A2Gji+6GhwUK8rEA==}
+  conventional-changelog-writer@9.3.0:
+    resolution: {integrity: sha512-lxiECDlvy880e7JIYAtAhxg0wD/CGCVbZCdeua5aOlQVFTEd39zAeOzwK22i/FO4xnEOURK1gbUTETNEYW7zxQ==}
     engines: {node: '>=22'}
     hasBin: true
 
-  conventional-changelog@8.1.0:
-    resolution: {integrity: sha512-idt1JK+3+Nt7gqH/d/sEYWdDeR+5XPov/jssmFN6XxmYSRlonTWSDWhWUPkmm0zbwYjtVdt+4My5aiPkKyvocw==}
+  conventional-changelog@8.1.3:
+    resolution: {integrity: sha512-fOMwLCxm46znJKPB08jLxl1FD8SOZOQHktlzCVhvhhVUfq0KgQSryoYXsRRHs1aRlZPR1/QK5wztnY8sBNC2AA==}
     engines: {node: '>=22'}
     hasBin: true
 
@@ -821,13 +842,13 @@ packages:
     resolution: {integrity: sha512-cs+LadpH7Kpw0M3k8wurk+sOVVDAENA0iK4OBOrkL94j5lEVYRJ4j3zd2bhY9qgzyrPqthdcYT3axzRN7AliMg==}
     engines: {node: '>=22'}
 
-  conventional-commits-parser@7.1.0:
-    resolution: {integrity: sha512-DPp6hkUjvwIivxbkrTiLXeRswNv1A/4GFA2X6scXma0AMa9632V3TwxmrlkUIEtUktiM3Ln+RrSH2xlP3/jUTw==}
+  conventional-commits-parser@7.1.4:
+    resolution: {integrity: sha512-TW3PZHi6hwF4cyu7KKc4kNqD1cgg8AkkK5ge9+zsEfpjaSXOeeIQyNWBr7kx5hR2wFuKVmr0be37RzcpmACQIA==}
     engines: {node: '>=22'}
     hasBin: true
 
-  conventional-recommended-bump@12.1.0:
-    resolution: {integrity: sha512-HTNG3kEZXOOfKwrEx54ljURU9bG4nVPQzXMyCSeUcA/PE8EpNpQNujSrbXNBI8QZyN35zM+pVw+FuQk4KqHSHg==}
+  conventional-recommended-bump@12.1.1:
+    resolution: {integrity: sha512-73tca4vG9rlrB/+DkjtJPVaSJRpValcqI5obhAEcepaKC4MLcubxWJCS9lf12F8hFMuAyX1Ji1AGYIisGroqAw==}
     engines: {node: '>=22'}
     hasBin: true
 
@@ -838,8 +859,8 @@ packages:
     resolution: {integrity: sha512-x1VCxdX4t+8wVfd1so/9w+vQ4vx7lKd2Qp5tDRutErwmR85OgmfX7RlLRMWafRMY7hbEiXIbudNrjOAPa/hL8Q==}
     engines: {node: '>=18'}
 
-  default-browser@5.5.0:
-    resolution: {integrity: sha512-H9LMLr5zwIbSxrmvikGuI/5KGhZ8E2zH3stkMgM5LpOWDutGM2JZaj460Udnf1a+946zc7YBgrqEWwbk7zHvGw==}
+  default-browser@5.5.1:
+    resolution: {integrity: sha512-m1pAzaJgZ/gssEqlOhJkPJp8Xly7QyW6xcrkUa2KKcDeDSEMP7X8xipU3snUcfisTQx0w1AGae+9UtJSfVnXGw==}
     engines: {node: '>=18'}
 
   define-lazy-prop@3.0.0:
@@ -1045,17 +1066,13 @@ packages:
     resolution: {integrity: sha512-hXdUTZYIVOt1Ex//jAQi+wTZZpUpwBj/0QsOzqegb3rGMMeJiSEu5xLHnYfBrRV4RH2+OCSOO95Is/7x1WJ4bw==}
     engines: {node: '>=10'}
 
-  mime-db@1.54.0:
-    resolution: {integrity: sha512-aU5EJuIN2WDemCcAp2vFBfp/m4EAhWJnUNSSw0ixs7/kXbd6Pg64EmwJkNdFhB8aWt1sH2CTXrLxo/iAGV3oPQ==}
-    engines: {node: '>= 0.6'}
-
-  mime-types@3.0.2:
-    resolution: {integrity: sha512-Lbgzdk0h4juoQ9fCKXW4by0UJqj+nOOrI9MJ1sSj4nI8aI2eo1qmvQEie4VD1glsS250n15LsWsYtCugiStS5A==}
-    engines: {node: '>=18'}
-
   minimatch@10.2.6:
     resolution: {integrity: sha512-vpLQEs+VLCr1nU0BXS07maYoFwlDAH0gngQuuttxIwutDFEMHq2blX+8vpgxDdK3J1PwjCJiep77OitTZ4Ll1A==}
     engines: {node: 18 || 20 || >=22}
+
+  minimatch@11.0.9:
+    resolution: {integrity: sha512-KCFkfyjqerNlSstjlhIGNXIKZGA/6O4V4RlhZ+Dsr621SPPw0mzlypE9D9ZOoPiVefHID+j7/XuMMlqfD/F60Q==}
+    engines: {node: 20 || >=22}
 
   minimist@1.2.8:
     resolution: {integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==}
@@ -1080,8 +1097,8 @@ packages:
     resolution: {integrity: sha512-5vvB5+W7ePv+p3uqxi+RcW1XAzLW0/hxt3/4X4Lc4qHudzOhmBiBwOY6DRob4WnanAEGvNcLjF+KNOufrUoEQw==}
     engines: {node: '>=12.20.0'}
 
-  open@11.0.0:
-    resolution: {integrity: sha512-smsWv2LzFjP03xmvFoJ331ss6h+jixfA4UUV/Bsiyuu4YJPfN+FIQGOIiv4w9/+MoHkfkJ22UIaQWRVFRfH6Vw==}
+  open@11.0.4:
+    resolution: {integrity: sha512-++Zlftm0kVLPmzC06t6epuWmcRMDbI4z5P3NNX979WA/k23+NtSOynEGzsVfZwguKw2mi5umVgnBlJQMwRz4Pg==}
     engines: {node: '>=20'}
 
   package-manager-detector@1.8.0:
@@ -1101,8 +1118,8 @@ packages:
     resolution: {integrity: sha512-vuwillviilfKZsg0VGj5R/YwwcHx4SLsIOI/7K6mQkWx+l5cUHTjj5g0AasTBcyXsbfTgrwsUNmVUb5xVwyPwg==}
     engines: {node: ^10 || ^12 || >=14}
 
-  powershell-utils@0.1.0:
-    resolution: {integrity: sha512-dM0jVuXJPsDN6DvRpea484tCUaMiXWjuCn++HGTqUWzGDjv5tZkEZldAJ/UMlqRYGFrD/etByo4/xOuC/snX2A==}
+  powershell-utils@0.2.1:
+    resolution: {integrity: sha512-C+y9x90UElAddDZmV4qOx9W53B61PO7cIqWz2dQsWlwswuq4mr8NEwytdGKboYbQlGZ3awrkTeNvcZiZNHnQ8A==}
     engines: {node: '>=20'}
 
   publint@0.3.25:
@@ -1158,6 +1175,11 @@ packages:
 
   semver@7.8.5:
     resolution: {integrity: sha512-Y7/KDsb8LjooZpwaqGyulO6DQlksgCncchHGk+sZIY4SBvUocMBEFH5Ur1fI4dV+Jvl0w6cjvucaIi40puRioA==}
+    engines: {node: '>=10'}
+    hasBin: true
+
+  semver@7.8.6:
+    resolution: {integrity: sha512-9lpSSU4Mly3mrtruwLs1eLK6+gzbzqeBFwRNjIjE+9LuDpWdYctrQlQ3ej1Ilgi7gknpsTRnPoLP8DpCHqHIJw==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -1368,12 +1390,12 @@ packages:
   wordwrap@1.0.0:
     resolution: {integrity: sha512-gvVzJFlPycKc5dZN4yPkP8w7Dc37BtP1yczEneOb4uq34pXZcvrtRTmWV8W+Ume+XCxKgbjM+nevkyFPMybd4Q==}
 
-  wsl-utils@0.3.1:
-    resolution: {integrity: sha512-g/eziiSUNBSsdDJtCLB8bdYEUMj4jR7AGeUo96p/3dTafgjHhpF4RiCFPiRILwjQoDXx5MqkBr4fwWtR3Ky4Wg==}
+  wsl-utils@1.0.1:
+    resolution: {integrity: sha512-c16PKLIRxBYpR3jSWsdS7SFp0COm5SOQdiFjY818dYFHJbMGuLBszpF07LBWmOS1uzrHa9VGdynsEgoeKy0oOQ==}
     engines: {node: '>=20'}
 
-  yaml@2.9.0:
-    resolution: {integrity: sha512-2AvhNX3mb8zd6Zy7INTtSpl1F15HW6Wnqj0srWlkKLcpYl/gMIMJiyuGq2KeI2YFxUPjdlB+3Lc10seMLtL4cA==}
+  yaml@2.9.1:
+    resolution: {integrity: sha512-3NxN8+78OdzbT7C/WjGsyfPAtJaN3FNDsWxv7Y7mcDsT/oOmgW8BpyQQFFBnvZE3j9Y2Sdz1ULFLezL7Eb2yFw==}
     engines: {node: '>= 14.6'}
     hasBin: true
 
@@ -1447,16 +1469,16 @@ snapshots:
       fast-wrap-ansi: 0.2.2
       sisteransi: 2.0.0
 
-  '@conventional-changelog/git-client@3.1.0(conventional-commits-filter@6.0.1)(conventional-commits-parser@7.1.0)':
+  '@conventional-changelog/git-client@3.2.0(conventional-commits-filter@6.0.1)(conventional-commits-parser@7.1.4)':
     dependencies:
       '@simple-libs/child-process-utils': 2.0.0
       '@simple-libs/stream-utils': 2.0.0
-      semver: 7.8.5
+      verkit: 0.5.0
     optionalDependencies:
       conventional-commits-filter: 6.0.1
-      conventional-commits-parser: 7.1.0
+      conventional-commits-parser: 7.1.4
 
-  '@conventional-changelog/template@1.2.1': {}
+  '@conventional-changelog/template@1.4.1': {}
 
   '@emnapi/core@1.11.1':
     dependencies:
@@ -1490,6 +1512,8 @@ snapshots:
       tslib: 2.8.1
     optional: true
 
+  '@isaacs/nonrecursive-glob-match@1.1.0': {}
+
   '@jridgewell/resolve-uri@3.1.2': {}
 
   '@jridgewell/sourcemap-codec@1.5.5': {}
@@ -1499,7 +1523,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@napi-rs/wasm-runtime@1.2.1(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)':
+  '@napi-rs/wasm-runtime@1.2.6(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)':
     dependencies:
       '@emnapi/core': 1.11.1
       '@emnapi/runtime': 1.11.1
@@ -1586,11 +1610,25 @@ snapshots:
       ansis: 4.5.0
       semver: 7.8.5
 
-  '@peiyanlu/node-utils@0.0.4':
+  '@peiyanlu/cli-utils@1.1.1(@clack/prompts@1.9.0)':
     dependencies:
-      '@peiyanlu/ts-utils': 1.0.0
-      minimatch: 10.2.6
-      tinyglobby: 0.2.17
+      '@peiyanlu/command-utils': 0.1.0
+      '@peiyanlu/node-utils': 0.2.0
+      '@peiyanlu/ts-utils': 1.1.0
+      semver: 7.8.6
+    optionalDependencies:
+      '@clack/prompts': 1.9.0
+
+  '@peiyanlu/command-utils@0.1.0':
+    dependencies:
+      '@peiyanlu/node-utils': 0.1.1
+      '@peiyanlu/ts-utils': 1.1.0
+
+  '@peiyanlu/git-utils@0.1.0':
+    dependencies:
+      '@peiyanlu/command-utils': 0.1.0
+      '@peiyanlu/node-utils': 0.1.1
+      '@peiyanlu/ts-utils': 1.1.0
 
   '@peiyanlu/node-utils@0.1.1':
     dependencies:
@@ -1598,30 +1636,34 @@ snapshots:
       minimatch: 10.2.6
       tinyglobby: 0.2.17
 
-  '@peiyanlu/release@1.3.1(conventional-commits-filter@6.0.1)':
+  '@peiyanlu/node-utils@0.2.0':
+    dependencies:
+      '@peiyanlu/ts-utils': 1.1.0
+      minimatch: 11.0.9
+      tinyglobby: 0.2.17
+
+  '@peiyanlu/release@2.3.0':
     dependencies:
       '@actions/core': 3.0.1
       '@actions/github': 9.1.1
       '@clack/prompts': 1.9.0
-      '@conventional-changelog/template': 1.2.1
+      '@conventional-changelog/template': 1.4.1
       '@octokit/rest': 22.0.1
-      '@peiyanlu/cli-utils': 0.0.15
-      '@peiyanlu/node-utils': 0.0.4
-      '@peiyanlu/ts-utils': 0.0.12
-      ansis: 4.5.0
+      '@peiyanlu/cli-utils': 1.1.1(@clack/prompts@1.9.0)
+      '@peiyanlu/command-utils': 0.1.0
+      '@peiyanlu/git-utils': 0.1.0
+      '@peiyanlu/node-utils': 0.2.0
+      '@peiyanlu/ts-utils': 1.1.0
       commander: 15.1.0
-      conventional-changelog: 8.1.0(conventional-commits-filter@6.0.1)
-      conventional-changelog-conventionalcommits: 10.2.1
-      conventional-recommended-bump: 12.1.0
-      mime-types: 3.0.2
-      minimatch: 10.2.6
-      open: 11.0.0
+      conventional-changelog: 8.1.3
+      conventional-changelog-conventionalcommits: 10.4.1
+      conventional-recommended-bump: 12.1.1
+      handlebars: 4.7.10
+      open: 11.0.4
       publint: 0.3.25
-      semver: 7.8.5
+      semver: 7.8.6
       tinyglobby: 0.2.17
-      yaml: 2.9.0
-    transitivePeerDependencies:
-      - conventional-commits-filter
+      yaml: 2.9.1
 
   '@peiyanlu/test-tools@0.0.7':
     dependencies:
@@ -1630,6 +1672,8 @@ snapshots:
   '@peiyanlu/ts-utils@0.0.12': {}
 
   '@peiyanlu/ts-utils@1.0.0': {}
+
+  '@peiyanlu/ts-utils@1.1.0': {}
 
   '@publint/pack@0.1.7':
     dependencies:
@@ -1718,7 +1762,7 @@ snapshots:
     dependencies:
       '@emnapi/core': 1.11.1
       '@emnapi/runtime': 1.11.1
-      '@napi-rs/wasm-runtime': 1.2.1(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
+      '@napi-rs/wasm-runtime': 1.2.6(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
     optional: true
 
   '@rolldown/binding-wasm32-wasi@1.3.2':
@@ -1751,7 +1795,7 @@ snapshots:
   '@simple-libs/normalize-package-data@1.0.0':
     dependencies:
       '@simple-libs/hosted-git-info': 2.0.0
-      semver: 7.8.5
+      semver: 7.8.6
 
   '@simple-libs/stream-utils@2.0.0': {}
 
@@ -1787,7 +1831,7 @@ snapshots:
       obug: 2.1.4
       std-env: 4.2.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.12(@types/node@24.13.3)(@vitest/coverage-v8@4.1.12)(vite@8.1.2(@types/node@24.13.3)(yaml@2.9.0))
+      vitest: 4.1.12(@types/node@24.13.3)(@vitest/coverage-v8@4.1.12)(vite@8.1.2(@types/node@24.13.3)(yaml@2.9.1))
 
   '@vitest/expect@4.1.12':
     dependencies:
@@ -1798,13 +1842,13 @@ snapshots:
       chai: 6.2.2
       tinyrainbow: 3.1.0
 
-  '@vitest/mocker@4.1.12(vite@8.1.2(@types/node@24.13.3)(yaml@2.9.0))':
+  '@vitest/mocker@4.1.12(vite@8.1.2(@types/node@24.13.3)(yaml@2.9.1))':
     dependencies:
       '@vitest/spy': 4.1.12
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      vite: 8.1.2(@types/node@24.13.3)(yaml@2.9.0)
+      vite: 8.1.2(@types/node@24.13.3)(yaml@2.9.1)
 
   '@vitest/pretty-format@4.1.12':
     dependencies:
@@ -1868,6 +1912,10 @@ snapshots:
     dependencies:
       balanced-match: 4.0.4
 
+  brace-expansion@5.1.0:
+    dependencies:
+      balanced-match: 4.0.4
+
   bundle-name@4.1.0:
     dependencies:
       run-applescript: 7.1.0
@@ -1880,53 +1928,52 @@ snapshots:
 
   content-type@2.0.0: {}
 
-  conventional-changelog-conventionalcommits@10.2.1:
+  conventional-changelog-conventionalcommits@10.4.1:
     dependencies:
-      '@conventional-changelog/template': 1.2.1
+      '@conventional-changelog/template': 1.4.1
 
   conventional-changelog-preset-loader@6.0.1: {}
 
-  conventional-changelog-writer@9.2.0:
+  conventional-changelog-writer@9.3.0:
     dependencies:
-      '@conventional-changelog/template': 1.2.1
+      '@conventional-changelog/template': 1.4.1
       '@simple-libs/stream-utils': 2.0.0
       argue-cli: 3.1.0
       conventional-commits-filter: 6.0.1
-      semver: 7.8.5
+      verkit: 0.5.0
 
-  conventional-changelog@8.1.0(conventional-commits-filter@6.0.1):
+  conventional-changelog@8.1.3:
     dependencies:
-      '@conventional-changelog/git-client': 3.1.0(conventional-commits-filter@6.0.1)(conventional-commits-parser@7.1.0)
+      '@conventional-changelog/git-client': 3.2.0(conventional-commits-filter@6.0.1)(conventional-commits-parser@7.1.4)
       '@simple-libs/hosted-git-info': 2.0.0
       '@simple-libs/normalize-package-data': 1.0.0
       argue-cli: 3.1.0
       conventional-changelog-preset-loader: 6.0.1
-      conventional-changelog-writer: 9.2.0
-      conventional-commits-parser: 7.1.0
+      conventional-changelog-writer: 9.3.0
+      conventional-commits-filter: 6.0.1
+      conventional-commits-parser: 7.1.4
       fd-package-json: 2.0.0
-    transitivePeerDependencies:
-      - conventional-commits-filter
 
   conventional-commits-filter@6.0.1: {}
 
-  conventional-commits-parser@7.1.0:
+  conventional-commits-parser@7.1.4:
     dependencies:
       '@simple-libs/stream-utils': 2.0.0
       argue-cli: 3.1.0
 
-  conventional-recommended-bump@12.1.0:
+  conventional-recommended-bump@12.1.1:
     dependencies:
-      '@conventional-changelog/git-client': 3.1.0(conventional-commits-filter@6.0.1)(conventional-commits-parser@7.1.0)
+      '@conventional-changelog/git-client': 3.2.0(conventional-commits-filter@6.0.1)(conventional-commits-parser@7.1.4)
       argue-cli: 3.1.0
       conventional-changelog-preset-loader: 6.0.1
       conventional-commits-filter: 6.0.1
-      conventional-commits-parser: 7.1.0
+      conventional-commits-parser: 7.1.4
 
   convert-source-map@2.0.0: {}
 
   default-browser-id@5.0.1: {}
 
-  default-browser@5.5.0:
+  default-browser@5.5.1:
     dependencies:
       bundle-name: 4.1.0
       default-browser-id: 5.0.1
@@ -2083,15 +2130,14 @@ snapshots:
     dependencies:
       semver: 7.8.5
 
-  mime-db@1.54.0: {}
-
-  mime-types@3.0.2:
-    dependencies:
-      mime-db: 1.54.0
-
   minimatch@10.2.6:
     dependencies:
       brace-expansion: 5.0.9
+
+  minimatch@11.0.9:
+    dependencies:
+      '@isaacs/nonrecursive-glob-match': 1.1.0
+      brace-expansion: 5.1.0
 
   minimist@1.2.8: {}
 
@@ -2105,14 +2151,14 @@ snapshots:
 
   obug@3.0.0: {}
 
-  open@11.0.0:
+  open@11.0.4:
     dependencies:
-      default-browser: 5.5.0
+      default-browser: 5.5.1
       define-lazy-prop: 3.0.0
       is-in-ssh: 1.0.0
       is-inside-container: 1.0.0
-      powershell-utils: 0.1.0
-      wsl-utils: 0.3.1
+      powershell-utils: 0.2.1
+      wsl-utils: 1.0.1
 
   package-manager-detector@1.8.0: {}
 
@@ -2128,7 +2174,7 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  powershell-utils@0.1.0: {}
+  powershell-utils@0.2.1: {}
 
   publint@0.3.25:
     dependencies:
@@ -2204,6 +2250,8 @@ snapshots:
       mri: 1.2.0
 
   semver@7.8.5: {}
+
+  semver@7.8.6: {}
 
   siginfo@2.0.0: {}
 
@@ -2284,7 +2332,7 @@ snapshots:
 
   verkit@0.5.0: {}
 
-  vite@8.1.2(@types/node@24.13.3)(yaml@2.9.0):
+  vite@8.1.2(@types/node@24.13.3)(yaml@2.9.1):
     dependencies:
       lightningcss: 1.32.0
       picomatch: 4.0.7
@@ -2294,12 +2342,12 @@ snapshots:
     optionalDependencies:
       '@types/node': 24.13.3
       fsevents: 2.3.3
-      yaml: 2.9.0
+      yaml: 2.9.1
 
-  vitest@4.1.12(@types/node@24.13.3)(@vitest/coverage-v8@4.1.12)(vite@8.1.2(@types/node@24.13.3)(yaml@2.9.0)):
+  vitest@4.1.12(@types/node@24.13.3)(@vitest/coverage-v8@4.1.12)(vite@8.1.2(@types/node@24.13.3)(yaml@2.9.1)):
     dependencies:
       '@vitest/expect': 4.1.12
-      '@vitest/mocker': 4.1.12(vite@8.1.2(@types/node@24.13.3)(yaml@2.9.0))
+      '@vitest/mocker': 4.1.12(vite@8.1.2(@types/node@24.13.3)(yaml@2.9.1))
       '@vitest/pretty-format': 4.1.12
       '@vitest/runner': 4.1.12
       '@vitest/snapshot': 4.1.12
@@ -2316,7 +2364,7 @@ snapshots:
       tinyexec: 1.3.1
       tinyglobby: 0.2.17
       tinyrainbow: 3.1.0
-      vite: 8.1.2(@types/node@24.13.3)(yaml@2.9.0)
+      vite: 8.1.2(@types/node@24.13.3)(yaml@2.9.1)
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 24.13.3
@@ -2333,12 +2381,12 @@ snapshots:
 
   wordwrap@1.0.0: {}
 
-  wsl-utils@0.3.1:
+  wsl-utils@1.0.1:
     dependencies:
       is-wsl: 3.1.1
-      powershell-utils: 0.1.0
+      powershell-utils: 0.2.1
 
-  yaml@2.9.0: {}
+  yaml@2.9.1: {}
 
   yuku@0.28.0:
     optionalDependencies:
